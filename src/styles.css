@@ -1,0 +1,1889 @@
+/*
+ * The Nessa UI tokens and type helpers, from the vendored Nessa UI subset (aliased in
+ * vite.config.ts). Everything below is this site's own, built on the same
+ * neutrals, rims and row geometry as the Nessa desktop window.
+ */
+@import '@nessa-ui/styles.css';
+
+:root {
+  --gutter: 8px;
+  --pane-radius: 14px;
+  --radius-row: 8px;
+  --radius-panel: 10px;
+  --sidebar-w: 260px;
+  --titlebar-h: 44px;
+  --inspector-w: min(380px, 36vw);
+
+  --ink: var(--foreground);
+  --ink-2: color-mix(in oklab, var(--foreground) 82%, transparent);
+  --muted: color-mix(in oklab, var(--foreground) 62%, transparent);
+  --faint: color-mix(in oklab, var(--foreground) 42%, transparent);
+  --hover: color-mix(in oklab, var(--foreground) 5%, transparent);
+  --selected: color-mix(in oklab, var(--foreground) 8.5%, transparent);
+  --press: color-mix(in oklab, var(--foreground) 11%, transparent);
+  --rim: color-mix(in oklab, var(--foreground) 9%, transparent);
+  --hairline: color-mix(in oklab, var(--foreground) 8%, transparent);
+  --focus: color-mix(in oklab, var(--foreground) 48%, transparent);
+
+  /* Solid, so Mermaid's edge labels (src/diagram.tsx PALETTE.stage) match exactly. */
+  --app-bg: oklch(0.955 0 0);
+  --pane: oklch(0.985 0 0);
+  --stage: #fbfbfb;
+  --diagram-node: #ffffff;
+  --link: oklch(0.5 0.13 252);
+  --warn: oklch(0.55 0.13 65);
+  --error: oklch(0.55 0.18 28);
+
+  --text-caption: 11.5px;
+  --text-small: 12.5px;
+  --text-ui: 13px;
+  --text-read: 15px;
+
+  --font: var(--nessa-font-sans);
+  --mono: var(--nessa-font-mono);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dark {
+  --app-bg: oklch(0.145 0 0);
+  --pane: oklch(0.185 0 0);
+  --stage: #161616;
+  --diagram-node: #232323;
+  --link: oklch(0.8 0.075 245);
+  --warn: oklch(0.82 0.12 78);
+  --error: oklch(0.74 0.14 28);
+  --rim: color-mix(in oklab, var(--foreground) 7%, transparent);
+  --hairline: color-mix(in oklab, var(--foreground) 7%, transparent);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  background: var(--app-bg);
+}
+
+body {
+  margin: 0;
+  background: var(--app-bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: var(--text-ui);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+code,
+pre,
+kbd {
+  font-family: var(--mono);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+dl,
+dd,
+figure {
+  margin: 0;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -48px;
+  z-index: 60;
+  padding: 6px 10px;
+  border-radius: var(--radius-row);
+  background: var(--pane);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--rim);
+}
+.skip-link:focus {
+  top: 12px;
+}
+
+.quiet {
+  color: var(--muted);
+}
+
+/* ——— Library controls, at desktop size ——— */
+
+.icon-button {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-row);
+  color: var(--muted);
+}
+.icon-button:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+.icon-button svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 1.75;
+}
+.icon-button[aria-disabled='true'] {
+  opacity: 0.35;
+  pointer-events: auto;
+  cursor: default;
+}
+.icon-button[aria-disabled='true']:hover {
+  background: transparent;
+  color: var(--muted);
+}
+.icon-button[aria-expanded='true'],
+.icon-button[aria-pressed='true'] {
+  background: var(--selected);
+  color: var(--ink);
+}
+
+.quiet-button {
+  height: 28px;
+  padding: 0 10px;
+  border-radius: var(--radius-row);
+  color: var(--ink-2);
+  font-size: var(--text-ui);
+  font-weight: 500;
+}
+.quiet-button:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+.quiet-button[aria-pressed='true'],
+.quiet-button[aria-expanded='true'] {
+  background: var(--selected);
+  color: var(--ink);
+}
+.quiet-button svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 1.75;
+}
+.narrow-only {
+  display: none;
+}
+
+/* ——— Shell: two inset panes on the window background ——— */
+
+.shell {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  gap: var(--gutter);
+  height: 100vh;
+  height: 100dvh;
+  padding: var(--gutter);
+  position: relative;
+  transition: grid-template-columns 240ms var(--ease);
+  /* The room the titlebar leaves for the app bar when the sidebar is not docked. */
+  --app-bar-w: 164px;
+}
+/* A drag follows the pointer: no easing behind it, no text selection (CHECKLIST R1). */
+.shell[data-resizing] {
+  transition: none;
+  cursor: col-resize;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.shell[data-sidebar='closed']:not([data-narrow]) {
+  grid-template-columns: 0 minmax(0, 1fr);
+  gap: 0;
+}
+
+.sidebar,
+.main {
+  min-height: 0;
+  border-radius: var(--pane-radius);
+  background: var(--pane);
+  box-shadow:
+    inset 0 0 0 1px var(--rim),
+    0 10px 30px -18px rgb(0 0 0 / 45%);
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-top: var(--titlebar-h);
+  -webkit-user-select: none;
+  user-select: none;
+}
+.shell[data-sidebar='closed']:not([data-narrow]) .sidebar {
+  visibility: hidden;
+}
+
+.sidebar-status {
+  flex: 1;
+  padding: 16px;
+  color: var(--muted);
+}
+
+/* ——— Sidebar resize: a 12px target centred on the 8px gutter ——— */
+
+.sidebar-resizer {
+  position: absolute;
+  top: var(--gutter);
+  bottom: var(--gutter);
+  left: calc(var(--gutter) + var(--sidebar-w) + var(--gutter) / 2 - 6px);
+  z-index: 15;
+  width: 12px;
+  cursor: col-resize;
+  touch-action: none;
+  transition: left 240ms var(--ease);
+}
+.shell[data-resizing] .sidebar-resizer {
+  transition: none;
+}
+/*
+ * A soft light runs along the edge near the pointer, as on the Nessa desktop
+ * window's resize edges (src/desktop/ui/resize-edge.css there). The handle
+ * sets --sidebar-glow to the pointer's height on it; unset (keyboard focus),
+ * the light sits at the middle. Held to the strip between the panes' corners.
+ */
+.sidebar-resizer::after {
+  content: '';
+  position: absolute;
+  inset: var(--pane-radius) 4.5px;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 3px 90px at 50%
+      clamp(0px, var(--sidebar-glow, calc(50% + var(--pane-radius))) - var(--pane-radius), 100%),
+    color-mix(in oklab, var(--foreground) 46%, transparent) 0%,
+    color-mix(in oklab, var(--foreground) 11%, transparent) 45%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+.sidebar-resizer:hover::after,
+.sidebar-resizer:focus-visible::after,
+.shell[data-resizing] .sidebar-resizer::after {
+  opacity: 1;
+}
+.sidebar-resizer:focus-visible {
+  outline: none;
+}
+
+.main {
+  position: relative;
+  min-width: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-padding-top: calc(var(--titlebar-h) + 12px);
+}
+
+.scrim {
+  display: none;
+}
+
+/* ——— App bar: the sidebar toggle and the nessaDocs name, top-left ——— */
+
+.app-bar {
+  position: fixed;
+  top: var(--gutter);
+  left: var(--gutter);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--titlebar-h);
+  padding: 0 8px;
+}
+.brand {
+  display: flex;
+  align-items: baseline;
+  padding: 3px 4px;
+  border-radius: 6px;
+  color: var(--ink);
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+.brand-name {
+  font-weight: 700;
+}
+.brand-product {
+  color: var(--muted);
+  font-weight: 400;
+}
+.brand:hover .brand-product {
+  color: var(--ink-2);
+}
+
+/* ——— Titlebar ——— */
+
+.titlebar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: var(--titlebar-h);
+  padding: 0 8px;
+  background: color-mix(in oklab, var(--pane) 86%, transparent);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: blur(20px) saturate(160%);
+  border-bottom: 1px solid var(--hairline);
+  transition: padding-left 240ms var(--ease);
+}
+.shell[data-sidebar='closed'] .titlebar,
+.shell[data-narrow] .titlebar {
+  padding-left: var(--app-bar-w);
+}
+.titlebar-controls {
+  display: flex;
+  flex: none;
+  gap: 2px;
+}
+.titlebar-actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.breadcrumbs {
+  min-width: 0;
+  flex: 1;
+}
+.breadcrumbs ol {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-ui);
+}
+.breadcrumbs li {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+.breadcrumbs li:not(:last-child) {
+  max-width: 180px;
+  flex-shrink: 3;
+}
+.breadcrumbs a,
+.breadcrumbs [aria-current] {
+  overflow: hidden;
+  padding: 3px 6px;
+  border-radius: 6px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.breadcrumbs a {
+  color: var(--muted);
+}
+.breadcrumbs a:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+.breadcrumbs [aria-current] {
+  color: var(--ink);
+  font-weight: 600;
+}
+.breadcrumb-separator {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  color: var(--faint);
+}
+
+/* ——— Sidebar ——— */
+
+.sidebar-inner {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.search {
+  position: relative;
+  padding: 10px 10px 6px;
+}
+.search-icon {
+  position: absolute;
+  top: 17px;
+  left: 19px;
+  display: flex;
+  color: var(--faint);
+  pointer-events: none;
+}
+.search-icon svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2;
+}
+.search .search-input {
+  height: 30px;
+  padding-left: 30px;
+  border-radius: var(--radius-row);
+  border-color: transparent;
+  background: var(--hover);
+  box-shadow: none;
+  font-size: var(--text-ui);
+}
+.search .search-input:focus-visible {
+  border-color: var(--focus);
+  box-shadow: none;
+  outline: none;
+}
+.search-results {
+  margin: 8px -2px 0;
+  max-height: calc(100dvh - 140px);
+  overflow-y: auto;
+}
+.search-results ul {
+  display: grid;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.search-result {
+  display: grid;
+  gap: 2px;
+  padding: 7px 10px;
+  border-radius: var(--radius-row);
+  color: var(--ink);
+}
+.search-result:hover {
+  background: var(--hover);
+}
+.search-title {
+  font-weight: 600;
+  font-size: var(--text-ui);
+}
+.search-snippet {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: var(--text-small);
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.search-status {
+  margin: 8px 10px 0;
+  color: var(--muted);
+}
+
+.tree {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 2px 8px 12px;
+  scrollbar-width: thin;
+}
+.tree-level {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tree-empty {
+  padding: 8px;
+  color: var(--muted);
+}
+.tree-row {
+  display: flex;
+  align-items: center;
+}
+.disclosure,
+.disclosure-spacer {
+  display: inline-flex;
+  flex: none;
+  width: 16px;
+  height: 28px;
+}
+.disclosure {
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  color: var(--faint);
+  cursor: pointer;
+}
+.disclosure:hover {
+  color: var(--ink);
+}
+.disclosure svg {
+  width: 12px;
+  height: 12px;
+  stroke-width: 2.25;
+  transition: transform 180ms var(--ease);
+}
+.disclosure[aria-expanded='true'] svg {
+  transform: rotate(90deg);
+}
+
+.row {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: var(--radius-row);
+  color: var(--ink-2);
+  font-size: var(--text-ui);
+}
+.row:hover {
+  background: var(--hover);
+}
+.row:active {
+  background: var(--press);
+}
+.row[aria-current='page'] {
+  background: var(--selected);
+  color: var(--ink);
+  font-weight: 600;
+}
+.row-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.row-icon {
+  display: inline-flex;
+  flex: none;
+  width: 16px;
+  justify-content: center;
+  color: var(--faint);
+}
+.row[aria-current='page'] .row-icon {
+  color: var(--muted);
+}
+.row-icon svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 1.75;
+}
+
+.tree-section {
+  margin-top: 14px;
+}
+.section-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  height: 26px;
+  padding: 0 8px 0 24px;
+  border: 0;
+  border-radius: var(--radius-row);
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: var(--text-caption);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-align: left;
+  cursor: pointer;
+}
+.section-toggle:hover {
+  color: var(--ink);
+}
+.section-toggle svg {
+  width: 12px;
+  height: 12px;
+  stroke-width: 2.25;
+  opacity: 0;
+  transform: rotate(90deg);
+  transition:
+    opacity 120ms ease,
+    transform 180ms var(--ease);
+}
+.section-toggle:hover svg,
+.section-toggle:focus-visible svg,
+.tree-section[data-collapsed] .section-toggle svg {
+  opacity: 1;
+}
+.tree-section[data-collapsed] .section-toggle svg {
+  transform: none;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  display: flex;
+  flex: none;
+  align-items: center;
+  padding: 6px 8px;
+  border-top: 1px solid var(--hairline);
+}
+.settings-link {
+  flex: 1;
+}
+
+/* ——— Pages ——— */
+
+.page {
+  padding: 28px 40px 96px;
+  max-width: 1280px;
+}
+.page-status {
+  padding: 28px 40px;
+  color: var(--muted);
+}
+.page-status p {
+  margin-bottom: 12px;
+}
+.page h1,
+.document-header h1 {
+  font-size: 26px;
+  line-height: 1.2;
+  font-weight: 650;
+  letter-spacing: -0.016em;
+  overflow-wrap: anywhere;
+}
+.page h1:focus {
+  outline: none;
+}
+.page h1:focus-visible {
+  outline: 2px solid var(--focus);
+}
+.page-summary,
+.not-found p {
+  margin-top: 10px;
+  max-width: 72ch;
+  color: var(--ink-2);
+  font-size: var(--text-read);
+}
+
+.document-header {
+  max-width: 76ch;
+  margin-bottom: 24px;
+}
+.document-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: var(--text-ui);
+}
+.document-meta [data-slot='status-label'] {
+  font-size: var(--text-ui);
+}
+.meta-warning {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--warn);
+  font: inherit;
+  cursor: pointer;
+}
+.document-summary {
+  margin-top: 12px;
+  color: var(--ink-2);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.caption {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* Sources and provenance: the last thing on a page, closed until asked for. */
+.provenance {
+  scroll-margin-top: calc(var(--titlebar-h) + 20px);
+  margin-top: 40px;
+  border-top: 1px solid var(--hairline);
+  font-size: var(--text-ui);
+}
+.provenance > summary {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  width: fit-content;
+  margin-top: 10px;
+  padding: 5px 8px 5px 6px;
+  border-radius: var(--radius-row);
+  color: var(--muted);
+  cursor: pointer;
+  list-style: none;
+}
+.provenance > summary::-webkit-details-marker {
+  display: none;
+}
+.provenance > summary::before {
+  content: '';
+  align-self: center;
+  width: 6px;
+  height: 6px;
+  margin-right: 2px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform 180ms var(--ease);
+}
+.provenance[open] > summary::before {
+  transform: rotate(45deg);
+}
+.provenance > summary:hover {
+  background: var(--hover);
+  color: var(--ink);
+}
+.provenance-title {
+  color: var(--ink-2);
+  font-weight: 600;
+}
+.provenance-count {
+  font-size: var(--text-small);
+  font-variant-numeric: tabular-nums;
+}
+.provenance-body {
+  max-width: 96ch;
+  margin-top: 10px;
+  padding: 14px 16px;
+  border-radius: var(--radius-panel);
+  background: var(--hover);
+  box-shadow: inset 0 0 0 1px var(--rim);
+}
+.provenance-body dl {
+  display: grid;
+  gap: 8px;
+}
+.provenance-body dl > div {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 12px;
+}
+.provenance-body dt {
+  color: var(--muted);
+}
+.provenance-body code {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.provenance-body .issues {
+  margin-top: 14px;
+}
+.details-note {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: var(--text-small);
+}
+.source-list {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Children: a compact list, not a wall of cards. */
+.child-section {
+  display: grid;
+  gap: 20px;
+  margin: 0 0 32px;
+}
+.document > .prose + .child-section {
+  margin-top: 40px;
+}
+.child-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-radius: var(--radius-panel);
+  box-shadow: inset 0 0 0 1px var(--rim);
+  overflow: hidden;
+}
+.child-list li + li {
+  border-top: 1px solid var(--hairline);
+}
+.child-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'title meta'
+    'summary meta';
+  column-gap: 16px;
+  padding: 9px 14px;
+  color: var(--ink);
+}
+.child-row:hover {
+  background: var(--hover);
+}
+.child-title {
+  grid-area: title;
+  font-size: 14px;
+  font-weight: 550;
+  overflow-wrap: anywhere;
+}
+.child-summary {
+  grid-area: summary;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: var(--text-ui);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.child-meta {
+  grid-area: meta;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+}
+.child-count {
+  min-width: 18px;
+  font-size: var(--text-small);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.child-count::after {
+  content: ' docs';
+}
+
+/* ——— Prose: reading width for text, full width for diagrams and tables ——— */
+
+.prose {
+  font-size: var(--text-read);
+  line-height: 1.65;
+  color: var(--ink);
+  overflow-wrap: break-word;
+}
+.prose > :is(p, ul, ol, blockquote, h2, h3, h4, h5, h6, .code-block, .raw-html) {
+  max-width: 76ch;
+}
+.prose > * + * {
+  margin-top: 14px;
+}
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  position: relative;
+  line-height: 1.3;
+  letter-spacing: -0.006em;
+}
+.prose > h2 {
+  margin-top: 40px;
+  font-size: 19px;
+  font-weight: 650;
+}
+.prose > h3 {
+  margin-top: 28px;
+  font-size: 16px;
+  font-weight: 650;
+}
+.prose > h4,
+.prose > h5,
+.prose > h6 {
+  margin-top: 22px;
+  font-size: var(--text-read);
+  font-weight: 650;
+}
+.prose > :first-child {
+  margin-top: 0;
+}
+/* Text when shown (hover, focus), so the readable --muted, not the icon tone --faint:
+   verification/real-data.mjs measures it ≥ 4.5:1 in both appearances. */
+.heading-anchor {
+  margin-left: 6px;
+  color: var(--muted);
+  font-weight: 400;
+  opacity: 0;
+}
+:is(h2, h3, h4, h5, h6):hover > .heading-anchor,
+.heading-anchor:focus-visible {
+  opacity: 1;
+}
+.prose a {
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--link) 35%, transparent);
+  text-underline-offset: 3px;
+}
+.prose a:hover {
+  text-decoration-color: currentColor;
+}
+.prose ul,
+.prose ol {
+  padding-left: 22px;
+}
+.prose li + li {
+  margin-top: 4px;
+}
+.prose li.task {
+  list-style: none;
+}
+.prose li.task input {
+  margin: 0 8px 0 -20px;
+}
+.prose :not(pre) > code {
+  padding: 0.1em 0.35em;
+  border-radius: 5px;
+  background: var(--selected);
+  font-size: 0.86em;
+  overflow-wrap: anywhere;
+}
+.prose blockquote {
+  padding-left: 14px;
+  border-left: 2px solid var(--rim);
+  color: var(--ink-2);
+}
+.prose hr {
+  margin: 32px 0;
+  border: 0;
+  border-top: 1px solid var(--hairline);
+}
+.code-block,
+.raw-html {
+  overflow-x: auto;
+  padding: 12px 14px;
+  border-radius: var(--radius-panel);
+  background: var(--stage);
+  box-shadow: inset 0 0 0 1px var(--rim);
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+.raw-html {
+  color: var(--muted);
+}
+.raw-html-inline {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.86em;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  border-radius: var(--radius-panel);
+  box-shadow: inset 0 0 0 1px var(--rim);
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.prose th,
+.prose td {
+  min-width: 8ch;
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+.prose th {
+  color: var(--muted);
+  font-size: var(--text-small);
+  font-weight: 600;
+  border-bottom: 1px solid var(--rim);
+}
+.prose tbody tr + tr td {
+  border-top: 1px solid var(--hairline);
+}
+
+/* Evidence: named, never opened. */
+.evidence {
+  color: var(--ink);
+}
+.evidence-path {
+  margin-left: 4px;
+  color: var(--muted);
+  font-size: 0.8em;
+  overflow-wrap: anywhere;
+}
+.prose .evidence-path {
+  padding: 0;
+  background: none;
+}
+.source-list .evidence-path {
+  margin-left: 0;
+  color: var(--ink-2);
+  font-size: 12px;
+}
+.evidence-flag {
+  margin-left: 6px;
+  color: var(--muted);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.evidence-missing .evidence-flag,
+.evidence-unresolved .evidence-flag {
+  color: var(--error);
+}
+.evidence-outside .evidence-flag {
+  color: var(--warn);
+}
+.evidence-unresolved {
+  text-decoration: underline wavy color-mix(in oklab, var(--error) 60%, transparent);
+  text-underline-offset: 3px;
+}
+.external-link::after {
+  content: '↗';
+  margin-left: 2px;
+  font-size: 0.8em;
+}
+
+/* ——— Diagrams ——— */
+
+.diagram {
+  margin: 24px 0 28px;
+  border-radius: 12px;
+  background: var(--stage);
+  box-shadow: inset 0 0 0 1px var(--rim);
+  overflow: hidden;
+}
+.diagram-stage {
+  overflow-x: auto;
+  padding: 24px;
+}
+.diagram-svg svg {
+  display: block;
+  margin: 0 auto;
+}
+/* Beside an open inspector: room on the right as wide as the part it covers (src/diagram.tsx), so the open element can sit clear of it. */
+.diagram-svg[data-covered] {
+  box-sizing: border-box;
+  width: fit-content;
+  min-width: 100%;
+  padding-right: var(--covered);
+}
+.diagram-pending {
+  color: var(--muted);
+}
+.diagram-error {
+  padding: 14px 16px;
+  color: var(--error);
+}
+.diagram-error p {
+  margin-top: 4px;
+  color: var(--ink-2);
+  font-family: var(--mono);
+  font-size: 12.5px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.diagram-source {
+  margin: 0;
+  padding: 12px 16px;
+  border-top: 1px solid var(--hairline);
+  font-size: 12.5px;
+  line-height: 1.55;
+  overflow-x: auto;
+}
+.diagram-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 40px;
+  padding: 4px 6px 4px 14px;
+  border-bottom: 1px solid var(--hairline);
+}
+.diagram-caption {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+.diagram-caption-text {
+  overflow: hidden;
+  color: var(--ink);
+  font-size: var(--text-ui);
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.diagram-read {
+  flex: none;
+  color: var(--muted);
+  font-size: var(--text-small);
+}
+.diagram-read:hover {
+  color: var(--ink);
+}
+.diagram-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+.diagram-scale {
+  min-width: 42px;
+  color: var(--muted);
+  font-size: var(--text-small);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+/*
+ * Interactive nodes (only those the document's diagramLinks or diagramDetails
+ * name): at rest a faint accent tint, a fine accent border and a small + mark;
+ * hover and focus deepen the tint. Every other node keeps the neutral Mermaid
+ * palette. --diagram-node matches PALETTE.node in src/diagram.tsx.
+ */
+.diagram-link {
+  cursor: pointer;
+}
+.diagram-link > :is(rect, polygon, circle, ellipse, path):first-of-type,
+.diagram-link > .label-container,
+.diagram-link > g > :is(rect, polygon, circle, ellipse, path).basic {
+  fill: color-mix(in oklab, var(--link) 11%, var(--diagram-node)) !important;
+  stroke: color-mix(in oklab, var(--link) 62%, var(--diagram-node)) !important;
+}
+.diagram-link:hover > :is(rect, polygon, circle, ellipse, path):first-of-type,
+.diagram-link:hover > .label-container,
+.diagram-link:focus-visible > :is(rect, polygon, circle, ellipse, path):first-of-type,
+.diagram-link:focus-visible > .label-container,
+.diagram-link[data-selected] > :is(rect, polygon, circle, ellipse, path):first-of-type,
+.diagram-link[data-selected] > .label-container {
+  fill: color-mix(in oklab, var(--link) 22%, var(--diagram-node)) !important;
+  stroke: var(--link) !important;
+}
+.diagram-depth-inset {
+  fill: none !important;
+  stroke: color-mix(in oklab, var(--link) 45%, transparent) !important;
+  stroke-width: 1px !important;
+  pointer-events: none;
+}
+.diagram-depth-mark {
+  pointer-events: none;
+}
+.diagram-depth-mark path {
+  fill: none !important;
+  stroke: color-mix(in oklab, var(--link) 80%, transparent) !important;
+  stroke-width: 1.3px !important;
+  stroke-linecap: round;
+}
+.diagram-link:focus-visible,
+.diagram-edge-detail:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/*
+ * Transitions with an explanation: the label (its one focusable control) reads
+ * in the accent with a + beside it; the line takes clicks through a wider
+ * invisible path. Hover, focus and the open detail tint the label and the line.
+ */
+.diagram-edge-detail {
+  cursor: pointer;
+}
+.diagram-edge-detail .edgeLabel,
+.diagram-edge-detail .edgeLabel p {
+  color: var(--link) !important;
+}
+.diagram-edge-detail .labelBkg {
+  border-radius: 4px;
+}
+.diagram-edge-detail:is(:hover, :focus-visible, [data-hover], [data-selected]) .labelBkg {
+  background: color-mix(in oklab, var(--link) 14%, var(--stage)) !important;
+}
+.diagram-edge-hit {
+  fill: none !important;
+  stroke: transparent !important;
+  stroke-width: 14px !important;
+  pointer-events: stroke;
+  cursor: pointer;
+}
+.diagram-edge-path:is([data-hover], [data-selected]) {
+  stroke: var(--link) !important;
+  stroke-width: 1.8px !important;
+}
+
+/*
+ * Diagram detail: Compact. Transition and edge labels and notes are not drawn; they
+ * stay in the SVG (and in the controls' names), so a focused, hovered or open
+ * transition or edge shows its words again. Sequence messages are content, not labels.
+ */
+.document-layout[data-diagram-detail='compact'] .diagram-svg svg :is(.edgeLabel > .label, .statediagram-note, .note-edge) {
+  opacity: 0;
+  pointer-events: none;
+}
+.document-layout[data-diagram-detail='compact'] .diagram-svg svg .edgeLabel:is(:focus-visible, [data-hover], [data-selected]) > .label {
+  opacity: 1;
+}
+
+/* Flat, fine lines: no Mermaid filters or shadows; Nessa-radius boxes. */
+.diagram-svg svg * {
+  filter: none !important;
+}
+.diagram-svg svg .node :is(rect, polygon, circle, ellipse, path),
+.diagram-svg svg .actor,
+.diagram-svg svg .cluster rect {
+  stroke-width: 1px !important;
+}
+.diagram-svg svg .node rect,
+.diagram-svg svg rect.actor,
+.diagram-svg svg .cluster rect {
+  rx: 6px;
+  ry: 6px;
+}
+
+.diagram[data-expanded] {
+  position: fixed;
+  inset: var(--gutter);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  box-shadow:
+    inset 0 0 0 1px var(--rim),
+    0 30px 80px -20px rgb(0 0 0 / 70%);
+}
+.diagram[data-expanded] .diagram-stage {
+  flex: 1;
+  overflow: auto;
+}
+
+/*
+ * Details inspector. Wide: an inset pane over the right of the reading pane,
+ * below the titlebar; the chart keeps its scale, gains room to pan, and moves
+ * the open element into view beside it. Narrow, or over an expanded chart: a
+ * modal sheet from the right edge.
+ */
+.detail-inspector {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: var(--ink);
+  background: var(--pane);
+  box-shadow:
+    inset 0 0 0 1px var(--rim),
+    0 24px 60px -24px rgb(0 0 0 / 60%);
+}
+.detail-inspector:not(:modal) {
+  position: fixed;
+  top: calc(var(--gutter) + var(--titlebar-h) + 8px);
+  right: calc(var(--gutter) + 10px);
+  bottom: calc(var(--gutter) + 10px);
+  left: auto;
+  z-index: 30;
+  width: var(--inspector-w);
+  height: auto;
+  max-height: none;
+  border-radius: 12px;
+}
+/* The pane covers the right of the reading pane: chart heads keep their controls clear of it (the stage keeps its size). */
+.document-layout[data-inspector='pane'] .diagram-head {
+  padding-right: calc(var(--inspector-w) + 4px);
+}
+.detail-inspector:modal {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(420px, calc(100vw - 32px));
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  border-radius: 14px 0 0 14px;
+}
+.detail-inspector::backdrop {
+  background: rgb(0 0 0 / 28%);
+}
+.detail-inspector[open] {
+  display: flex;
+  flex-direction: column;
+}
+.inspector-frame {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+}
+.inspector-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 8px;
+  padding: 14px 12px 10px 18px;
+  border-bottom: 1px solid var(--hairline);
+}
+.inspector-kind {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-caption);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.inspector-title {
+  grid-column: 1;
+  margin: 2px 0 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+/* The title is where focus lands on opening (tabindex -1), not a control: no ring. */
+.inspector-title:focus {
+  outline: none;
+}
+.inspector-close {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: start;
+}
+.inspector-element {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 6px;
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: var(--text-small);
+}
+.inspector-label {
+  flex-basis: 100%;
+  color: var(--ink-2);
+}
+.inspector-open {
+  grid-column: 1 / -1;
+  justify-self: start;
+  margin-top: 8px;
+  color: var(--link);
+  font-size: var(--text-ui);
+}
+.inspector-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px 18px 18px;
+}
+.inspector-body:focus {
+  outline: none;
+}
+.inspector-prose {
+  font-size: 14px;
+}
+.inspector-more {
+  margin: 4px 0 0 -8px;
+}
+.inspector-chart {
+  margin: 10px 0;
+}
+.inspector-chart a {
+  color: var(--link);
+}
+.inspector-section-link {
+  display: inline-block;
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: var(--text-small);
+}
+
+/* ——— Popover: On this page ——— */
+
+.outline-menu {
+  position: relative;
+}
+.popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 20;
+  width: min(340px, calc(100vw - 32px));
+  max-height: min(60vh, 520px);
+  overflow-y: auto;
+  padding: 6px;
+  border-radius: 12px;
+  background: color-mix(in oklab, var(--pane) 92%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  backdrop-filter: blur(24px) saturate(170%);
+  box-shadow:
+    inset 0 0 0 1px var(--rim),
+    0 18px 50px -12px rgb(0 0 0 / 55%);
+}
+.outline ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.outline a {
+  display: block;
+  padding: 5px 10px;
+  border-radius: 6px;
+  color: var(--ink-2);
+  font-size: var(--text-ui);
+  line-height: 1.35;
+}
+.outline li[data-depth='3'] a {
+  padding-left: 22px;
+  color: var(--muted);
+}
+.outline a:hover,
+.outline a:focus-visible {
+  background: var(--hover);
+  color: var(--ink);
+  outline: none;
+}
+
+/* ——— Settings ——— */
+
+.settings-page {
+  max-width: 760px;
+}
+.settings-tabs {
+  margin-top: 16px;
+  gap: 20px;
+}
+.settings-panel:not([hidden]) {
+  display: grid;
+  gap: 20px;
+}
+.health {
+  display: grid;
+  gap: 4px;
+}
+.health .issues {
+  margin-top: 16px;
+}
+.health-ok {
+  margin-top: 12px;
+  font-size: var(--text-ui);
+}
+.health-failure {
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-panel);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--error) 40%, transparent);
+  color: var(--error);
+  font-size: var(--text-ui);
+}
+.settings-page [data-action='reload-catalog'] {
+  gap: 6px;
+}
+.settings-page [data-action='reload-catalog'][aria-busy='true'] svg {
+  animation: settings-spin 900ms linear infinite;
+}
+@keyframes settings-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (max-width: 899px) {
+  .settings-page .quiet-button,
+  .settings-page [data-slot='segmented-control-option'] {
+    min-height: 40px;
+  }
+}
+
+/* ——— Issues ——— */
+
+.issues {
+  margin-top: 20px;
+}
+.issues ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-radius: var(--radius-panel);
+  box-shadow: inset 0 0 0 1px var(--rim);
+  overflow: hidden;
+}
+.issue {
+  display: grid;
+  gap: 4px;
+  padding: 10px 14px;
+  font-size: var(--text-ui);
+}
+.issue + .issue {
+  border-top: 1px solid var(--hairline);
+}
+.issue-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+}
+.issue-severity {
+  font-size: var(--text-caption);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.issue-error .issue-severity {
+  color: var(--error);
+}
+.issue-warning .issue-severity {
+  color: var(--warn);
+}
+.issue-code {
+  font-size: 12px;
+}
+.issue-file {
+  color: var(--muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.issue-message {
+  color: var(--ink-2);
+}
+
+/* ——— Narrow windows: one pane, the sidebar a drawer ——— */
+
+@media (max-width: 899px) {
+  .shell {
+    display: block;
+    height: auto;
+    padding: 0;
+    --app-bar-w: 170px;
+  }
+  .app-bar {
+    top: 0;
+    left: 0;
+    z-index: 50;
+    height: 52px;
+    gap: 4px;
+  }
+  .app-bar .icon-button {
+    width: 40px;
+    height: 40px;
+  }
+  body {
+    overflow: auto;
+  }
+  .main {
+    min-height: 100dvh;
+    overflow: visible;
+    border-radius: 0;
+    background: var(--app-bg);
+    box-shadow: none;
+  }
+  .titlebar {
+    background: color-mix(in oklab, var(--app-bg) 88%, transparent);
+  }
+  .sidebar {
+    position: fixed;
+    top: var(--gutter);
+    bottom: var(--gutter);
+    left: var(--gutter);
+    z-index: 40;
+    width: min(84vw, 320px);
+    background: var(--pane);
+    box-shadow:
+      inset 0 0 0 1px var(--rim),
+      0 24px 60px -12px rgb(0 0 0 / 60%);
+    transform: translateX(calc(-100% - 2 * var(--gutter)));
+    visibility: hidden;
+    transition:
+      transform 240ms var(--ease),
+      visibility 0s linear 240ms;
+  }
+  .sidebar[data-open='true'] {
+    transform: none;
+    visibility: visible;
+    transition: transform 240ms var(--ease);
+  }
+  .scrim:not([hidden]) {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    display: block;
+    border: 0;
+    background: rgb(0 0 0 / 40%);
+  }
+  .page,
+  .page-status {
+    padding: 20px 16px 72px;
+  }
+  .document-header h1,
+  .page h1 {
+    font-size: 23px;
+  }
+  .diagram-stage {
+    padding: 14px;
+  }
+  .row,
+  .disclosure,
+  .disclosure-spacer {
+    height: 36px;
+  }
+}
+
+@media (max-width: 599px) {
+  .shell {
+    --app-bar-w: 56px;
+  }
+  /* A phone shows the name in the open drawer; the titlebar keeps its room. */
+  .shell[data-sidebar='closed'] .brand {
+    display: none;
+  }
+  .narrow-only {
+    display: inline-block;
+  }
+  .wide-only {
+    display: none;
+  }
+  .quiet-button:has(.narrow-only) {
+    width: 40px;
+    padding: 0;
+  }
+  .breadcrumbs li:not(:last-child) {
+    display: none;
+  }
+  .child-row {
+    grid-template-areas:
+      'title'
+      'summary'
+      'meta';
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .child-meta {
+    margin-top: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+  .settings-page [data-action='reload-catalog'][aria-busy='true'] svg {
+    animation: none;
+  }
+}
+
+/* The current place fades in once the page title has scrolled under the titlebar. */
+.breadcrumbs [aria-current]:not([data-shown]) {
+  opacity: 0;
+}
+.breadcrumbs [aria-current] {
+  transition: opacity 180ms ease;
+}
+.breadcrumbs li:has(+ li > [aria-current]:not([data-shown])) .breadcrumb-separator {
+  opacity: 0;
+}
+
+/* In a list, the status is its mark; the word is the tooltip and the accessible text. */
+.status-compact {
+  position: relative;
+  gap: 0;
+}
+.status-compact > :not([data-slot='status-label-mark']) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Touch: titlebar controls are 40px targets on narrow windows. */
+@media (max-width: 899px) {
+  .titlebar .icon-button {
+    width: 40px;
+    height: 40px;
+  }
+  .titlebar .quiet-button {
+    height: 40px;
+  }
+  .titlebar {
+    height: 52px;
+    gap: 2px;
+  }
+}
+
+/* ——— Diagrams view: the charts are the page ——— */
+
+.document-header[data-compact] {
+  max-width: none;
+  margin-bottom: 14px;
+}
+.document-header[data-compact] h1 {
+  font-size: 22px;
+  line-height: 1.25;
+}
+.document-header[data-compact] .document-meta {
+  flex-wrap: nowrap;
+  margin-top: 4px;
+  white-space: nowrap;
+}
+.document-summary-inline {
+  min-width: 0;
+  overflow: hidden;
+  padding-left: 14px;
+  border-left: 1px solid var(--rim);
+  color: var(--muted);
+  text-overflow: ellipsis;
+}
+.document-layout[data-view='diagrams'] {
+  padding-top: 16px;
+}
+.diagram-view {
+  display: grid;
+  gap: 20px;
+}
+.diagram-view .diagram {
+  margin: 0;
+}
+/* Each chart gets the window: it never runs past the bottom edge on arrival. */
+.diagram[data-canvas] .diagram-stage {
+  max-height: max(320px, calc(100dvh - 196px));
+  overflow: auto;
+}
+.diagram-view + .child-section {
+  margin-top: 28px;
+}
+.view-switch-slot {
+  display: flex;
+  margin-right: 6px;
+}
+.view-switch-slot.narrow-only {
+  display: none;
+}
+.view-switch [data-slot='segmented-control-option'] {
+  height: 26px;
+  font-size: var(--text-ui);
+}
+@media (max-width: 599px) {
+  .view-switch-slot.narrow-only {
+    display: flex;
+    margin: 12px 0 0;
+  }
+  .view-switch-slot.wide-only {
+    display: none;
+  }
+  .view-switch [data-slot='segmented-control-option'] {
+    height: 40px;
+    padding: 0 16px;
+  }
+  .document-summary-inline {
+    display: none;
+  }
+  .diagram-head {
+    flex-wrap: wrap;
+    padding-top: 8px;
+  }
+  .diagram-caption {
+    flex: 1 1 100%;
+  }
+  .diagram-actions {
+    margin-left: -8px;
+  }
+  .diagram[data-canvas] .diagram-stage {
+    max-height: max(320px, calc(100dvh - 236px));
+  }
+}
+/* While the page title is on screen, the faded current place takes no room from the trail. */
+.breadcrumbs li:has(> [aria-current]:not([data-shown])) {
+  flex: 0 0 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Phone: provenance labels above their values, so paths get the full width. */
+@media (max-width: 599px) {
+  .provenance-body dl > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+  .provenance-body {
+    padding: 12px;
+  }
+}
+
+/* Every child row opens its document: a quiet trailing chevron says so. */
+.child-row {
+  grid-template-columns: minmax(0, 1fr) auto 12px;
+  grid-template-areas:
+    'title meta chevron'
+    'summary meta chevron';
+}
+.child-chevron {
+  grid-area: chevron;
+  align-self: center;
+  width: 12px;
+  height: 12px;
+  color: var(--faint);
+  stroke-width: 2;
+  transition: transform 160ms var(--ease), color 120ms ease;
+}
+.child-row:hover .child-chevron,
+.child-row:focus-visible .child-chevron {
+  color: var(--ink);
+  transform: translateX(2px);
+}
+@media (max-width: 599px) {
+  .child-row {
+    grid-template-columns: minmax(0, 1fr) 12px;
+    grid-template-areas:
+      'title chevron'
+      'summary chevron'
+      'meta chevron';
+  }
+}
+
+/* Pan and zoom (src/canvas-gestures.ts): the stage is a surface you can grab. */
+.diagram-stage {
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: pan-x pan-y; /* one finger scrolls natively; two fingers reach the pinch handler */
+}
+.diagram-stage[data-pannable] {
+  cursor: grab;
+}
+.diagram-stage[data-panning],
+.diagram-stage[data-panning] * {
+  cursor: grabbing !important;
+}
+
+/* Project opening stays in the reading pane and uses the existing primitives. */
+.open-project { max-width: 680px; padding-bottom: 48px; }
+.open-project p { line-height: 1.65; color: var(--muted); }
+.open-project h1 { margin-bottom: 20px; }
+.open-project a { color: var(--link); }
+.open-project-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 32px; }
+.open-project form { display: grid; gap: 12px; }
+.open-project form label { font-weight: 550; }
+.open-project form button { justify-self: start; }
+.open-project form input { width: 100%; min-width: 0; }
+.open-project form p { margin: 0; font-size: var(--text-small); }
+.project-opening-error { margin-top: 24px; }
+.agent-prompt { white-space: pre-wrap; overflow-wrap: anywhere; font-size: var(--text-small); }
+
+.open-project p code { white-space: nowrap; }
+
+.project-folder-input { display: flex; gap: 8px; align-items: center; min-width: 0; }
+.project-folder-input input { flex: 1; }
+.open-project form .project-folder-input button { flex: none; }
+.picker-hint { font-size: var(--text-small); line-height: 1.5; }

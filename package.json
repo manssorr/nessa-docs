@@ -1,0 +1,49 @@
+{
+  "name": "nessa-docs",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Local, read-only browser for agent-authored docs/state.",
+  "type": "module",
+  "engines": {
+    "node": "^22.13.0 || ^24.0.0 || >=26.0.0"
+  },
+  "scripts": {
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "vite build",
+    "build:server": "tsc -p tsconfig.server.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.server.json --noEmit",
+    "test": "vitest run",
+    "start": "node dist/server/server/main.js",
+    "dev:api": "tsc -p tsconfig.server.json && node dist/server/server/main.js",
+    "dev:client": "vite",
+    "verify:browser": "node verification/run-all.mjs",
+    "validate:docs": "npm run build:server --silent && node dist/server/server/project-opening/validate-cli.js"
+  },
+  "dependencies": {
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource-variable/geist-mono": "^5.3.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "jsdom": "^29.1.1",
+    "lucide-react": "^0.468.0",
+    "marked": "^18.0.14",
+    "mermaid": "^12.1.0",
+    "radix-ui": "^1.6.7",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwind-merge": "^3.7.0",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.2",
+    "vitest": "^5.0.3",
+    "playwright": "^1.58.2"
+  }
+}

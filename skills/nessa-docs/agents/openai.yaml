@@ -1,0 +1,4 @@
+interface:
+  display_name: "Nessa Docs"
+  short_description: "Map project flows in browsable Markdown diagrams"
+  default_prompt: "Use $nessa-docs to document this project's system and important flows in docs/state, then help me open them locally."

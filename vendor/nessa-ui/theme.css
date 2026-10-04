@@ -1,0 +1,462 @@
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  /* Darker than stock shadcn (0.556): the gate requires 4.5:1 on --muted. */
+  --muted-foreground: oklch(0.52 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.235 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.556 0 0);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.141 0.005 285.823);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.556 0 0);
+  --radius: 0.625rem;
+  --nessa-font-sans: "Geist Variable", "Geist", ui-sans-serif, system-ui, sans-serif;
+  --nessa-font-mono: "Geist Mono Variable", "Geist Mono", ui-monospace, monospace;
+  /* Coordinated typography levels: each level is a size, an unitless
+     line-height ratio, and a tracking contract, never a lone font size. */
+  --nessa-font-size-1: 0.6875rem;
+  --nessa-font-size-2: 0.75rem;
+  --nessa-font-size-3: 0.8125rem;
+  --nessa-font-size-4: 0.875rem;
+  --nessa-font-size-5: 1rem;
+  --nessa-font-size-6: 1.125rem;
+  --nessa-font-size-7: 1.25rem;
+  --nessa-line-height-1: 1.454545;
+  --nessa-line-height-2: 1.333333;
+  --nessa-line-height-3: 1.538462;
+  --nessa-line-height-4: 1.428571;
+  --nessa-line-height-5: 1.5;
+  --nessa-line-height-6: 1.555556;
+  --nessa-line-height-7: 1.4;
+  --nessa-letter-spacing-1: 0em;
+  --nessa-letter-spacing-2: 0em;
+  --nessa-letter-spacing-3: 0em;
+  --nessa-letter-spacing-4: 0em;
+  --nessa-letter-spacing-5: 0em;
+  --nessa-letter-spacing-6: 0em;
+  --nessa-letter-spacing-7: 0em;
+  --nessa-motion-duration-instant: 0ms;
+  --nessa-motion-duration-fast: 120ms;
+  --nessa-motion-duration-normal: 200ms;
+  --nessa-motion-duration-slow: 300ms;
+  --nessa-motion-duration-ambient: 3.2s;
+  --nessa-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --nessa-motion-easing-emphasized: cubic-bezier(0.4, 0, 0.2, 1);
+  /* For a value arriving at a target rather than an element entering: it
+     leaves rest gently, builds through the middle, and then spends most of
+     its time settling — a third of the travel is still to come at the
+     halfway point. Across a long journey — a ring closing, a gauge landing
+     on a reading — `standard` reads as a constant-speed wipe and
+     `emphasized` finishes too abruptly to look like something coming to
+     rest. */
+  --nessa-motion-easing-arrival: cubic-bezier(0.4, 0, 0.15, 1);
+  --nessa-thinking-fill-base: oklch(0.56 0.2 265);
+  --nessa-thinking-fill-current: oklch(0.68 0.2 304);
+  --nessa-thinking-fill-highlight: oklch(0.86 0.11 214);
+  --nessa-fast-mode-active: oklch(0.57 0.22 300);
+  /* The fixed chat identity, in the same two steps the activity rings use:
+     the accent is the surface — the sent bubble, the live dot, the approve
+     button — and holds 4.7:1 under the white set on it. The ink is the
+     version that survives being the text itself. A link or an icon written
+     in the accent reads at 4.70:1 on pure white and less on anything a shade
+     off it, which is a boundary a component cannot control; in Dark it was
+     4.21:1 on the background and 3.81:1 on a card, below AA outright. Write
+     in the ink, never in the surface colour. */
+  --nessa-chat-accent: #0071e3;
+  --nessa-chat-accent-ink: #0064c8;
+  --nessa-chat-rim-0: rgba(245, 158, 11, 0.06);
+  --nessa-chat-rim-1: rgba(245, 158, 11, 0.22);
+  --nessa-chat-rim-2: rgba(236, 72, 153, 0.42);
+  --nessa-chat-rim-3: rgba(168, 85, 247, 0.62);
+  --nessa-chat-rim-4: rgba(56, 189, 248, 0.85);
+  --nessa-chat-rim-head: #ffffff;
+  --nessa-chart-series-1: oklch(0.7732 0.075 265);
+  --nessa-chart-series-1-strong: oklch(0.46 0.1 265);
+  --nessa-chart-series-2: oklch(0.8656 0.075 45);
+  --nessa-chart-series-2-strong: oklch(0.68 0.1 45);
+  --nessa-chart-series-3: oklch(0.8236 0.075 190);
+  --nessa-chart-series-3-strong: oklch(0.58 0.1 190);
+  --nessa-chart-series-4: oklch(0.9076 0.075 85);
+  --nessa-chart-series-4-strong: oklch(0.78 0.1 85);
+  --nessa-chart-series-5: oklch(0.8446 0.075 15);
+  --nessa-chart-series-5-strong: oklch(0.63 0.1 15);
+  --nessa-chart-series-6: oklch(0.7984 0.075 145);
+  --nessa-chart-series-6-strong: oklch(0.52 0.1 145);
+  --nessa-chart-series-7: oklch(0.79 0.075 305);
+  --nessa-chart-series-7-strong: oklch(0.5 0.1 305);
+  --nessa-chart-series-8: oklch(0.8824 0.071 230);
+  --nessa-chart-series-8-strong: oklch(0.72 0.1 230);
+  /* The ink for text written *on* a ramp fill — a pie wedge's inside label.
+     The ramp is pastel in both themes, so one near-black ink reads on every
+     slot (5.16:1 on the darkest fill, 15:1 on the palest); the near-white
+     `--foreground` a dark theme would otherwise use falls to 1.9:1. */
+  --nessa-chart-label-ink: oklch(0.205 0 0);
+  /* Notification wash tints, separate from market and diff semantics. */
+  --nessa-notification-error: oklch(0.65 0.13 20);
+  --nessa-notification-success: oklch(0.62 0.10 155);
+  /* The closing-ring trio, in the register people already read as activity:
+     energy, effort, uprightness. This is a named set of roles, not three
+     slots borrowed from the categorical ramp — see
+     docs/architecture/chart-series-ramp.md. Each role carries two steps: the
+     band, a graphical mark held to the 3:1 non-text floor against its own
+     track, and the ink, the deepest hue-true version that still clears 4.5:1
+     as text on the surface. A legend names its ring by writing in the ink,
+     never by setting text in the band colour. */
+  --nessa-activity-ring-1: oklch(0.62 0.235 17);
+  --nessa-activity-ring-1-ink: oklch(0.55 0.205 17);
+  --nessa-activity-ring-2: oklch(0.84 0.215 131);
+  --nessa-activity-ring-2-ink: oklch(0.51 0.125 131);
+  --nessa-activity-ring-3: oklch(0.78 0.13 205);
+  --nessa-activity-ring-3-ink: oklch(0.51 0.085 205);
+  /* The shadow a lapped ring's leading cap casts on the lap beneath it. It is
+     the only thing separating a ring at 100% from one at 200%, both of which
+     are a closed circle, so a completed lap stays at full strength and this
+     does the separating. */
+  --nessa-activity-ring-cap-shadow: oklch(0 0 0 / 0.38);
+  --nessa-diff-addition: oklch(0.5 0.137 150);
+  --nessa-diff-deletion: oklch(0.55 0.19 27);
+  --nessa-invalid-ring: color-mix(in oklab, var(--destructive) 20%, transparent);
+  --nessa-diff-dark-addition: oklch(0.6222 0.1661 146.22);
+  /* Market direction — a second colour axis beside the categorical series
+     ramp: a quote's rise and fall are one semantic pair, not two series
+     slots. The values start out near the diff pair — loss is the same red,
+     gain a slightly different green — because both encode an up/down reading
+     at the same contrast floor; they are separate tokens so a theme can move
+     a trading surface's colour without touching how a code review reads.
+     Delta, Meter, and StatusLabel borrow this pair for their good and bad
+     tones until a status colour role exists, so moving it moves them too —
+     see docs/architecture/chart-series-ramp.md. */
+  --nessa-market-gain: oklch(0.5 0.135 148);
+  --nessa-market-loss: oklch(0.55 0.19 27);
+}
+
+/* Dark, anchored to the scope that resolved it.
+
+   `.dark` is the shadcn-compatible selector this file has always carried.
+   `[data-nessa-mode="dark"]` is Nessa's own, written by NessaProvider and by
+   every theme-bearing NessaThemeScope, and it is what makes nesting work: a
+   selector matching the *nearest* scope's attribute rather than any dark
+   ancestor lets a dark region sit inside a light page and resolve on its own.
+
+   `:where()` keeps it at zero specificity, so a consumer override on the same
+   scope wins without an `!important`. Custom properties inherit, so a nested
+   scope redeclaring them is what descendants read — specificity never enters
+   into it across elements.
+
+   Light inside dark is the half this does not yet do: it needs the complete
+   Light foundation emitted onto every scope selector, which is the token
+   generator TOKEN-001 tracks. Until then a nested Light scope inherits the
+   Dark values above it. */
+/* The Light half of the same statement. A scope that resolved Light needs to
+   say so where it is, or a Light layer inside a Dark page would keep the dark
+   scrollbars and controls it inherited. */
+:where([data-nessa-mode="light"]) {
+  color-scheme: light;
+}
+
+.dark,
+:where([data-nessa-mode="dark"]) {
+  /* Declared with the tokens, not only on the provider's element: a floating
+     layer carries the attribute to wherever it portalled, and its scrollbars
+     and form controls have to agree with the surface it is drawn on. */
+  color-scheme: dark;
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.187 22.216);
+  --destructive-foreground: oklch(0.145 0 0);
+  /* Translucent white composites in encoded sRGB, not linear light: over
+     `--background` these read as #5a5a5a and #616161 on screen. Stock
+     shadcn's 10% renders at 1.28:1 — the earlier 12%/15% here were chosen
+     against a checker that composited in linear space and reported 3.26:1
+     and 3.82:1 for colors the screen draws at 1.33:1 and 1.47:1. These are
+     the alphas that actually clear the 3:1 required-boundary threshold. */
+  --border: oklch(1 0 0 / 35%);
+  --input: oklch(1 0 0 / 38%);
+  /* Focus rings are drawn at 40% opacity, so the ring token has to be bright
+     enough that 40% of it still clears 3:1 against the darkest surface it
+     lands on. 0.708 did not: it rendered at 2.11:1. */
+  --ring: oklch(0.92 0 0);
+  --sidebar: oklch(0.141 0.005 285.823);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.274 0.006 286.033);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.274 0.006 286.033);
+  --sidebar-ring: oklch(0.708 0 0);
+  --nessa-thinking-fill-base: oklch(0.54 0.19 264);
+  --nessa-thinking-fill-current: oklch(0.67 0.2 306);
+  --nessa-thinking-fill-highlight: oklch(0.82 0.12 210);
+  --nessa-fast-mode-active: oklch(0.72 0.185 306);
+  --nessa-chat-accent: #0071e3;
+  --nessa-chat-accent-ink: #5aaaff;
+  --nessa-chat-rim-0: rgba(245, 158, 11, 0.06);
+  --nessa-chat-rim-1: rgba(245, 158, 11, 0.22);
+  --nessa-chat-rim-2: rgba(236, 72, 153, 0.42);
+  --nessa-chat-rim-3: rgba(168, 85, 247, 0.62);
+  --nessa-chat-rim-4: rgba(56, 189, 248, 0.85);
+  --nessa-chat-rim-head: #ffffff;
+  --nessa-chart-series-1: oklch(0.6332 0.075 265);
+  --nessa-chart-series-1-strong: oklch(0.7032 0.1 265);
+  --nessa-chart-series-2: oklch(0.7256 0.075 45);
+  --nessa-chart-series-2-strong: oklch(0.7956 0.1 45);
+  --nessa-chart-series-3: oklch(0.6836 0.075 190);
+  --nessa-chart-series-3-strong: oklch(0.7536 0.1 190);
+  --nessa-chart-series-4: oklch(0.7676 0.075 85);
+  --nessa-chart-series-4-strong: oklch(0.8376 0.1 85);
+  --nessa-chart-series-5: oklch(0.7046 0.075 15);
+  --nessa-chart-series-5-strong: oklch(0.7746 0.1 15);
+  --nessa-chart-series-6: oklch(0.6584 0.075 145);
+  --nessa-chart-series-6-strong: oklch(0.7284 0.1 145);
+  --nessa-chart-series-7: oklch(0.65 0.075 305);
+  --nessa-chart-series-7-strong: oklch(0.72 0.1 305);
+  --nessa-chart-series-8: oklch(0.7824 0.071 230);
+  --nessa-chart-series-8-strong: oklch(0.8524 0.1 230);
+  --nessa-chart-label-ink: oklch(0.205 0 0);
+  --nessa-notification-error: oklch(0.76 0.12 20);
+  --nessa-notification-success: oklch(0.76 0.11 155);
+  --nessa-activity-ring-1: oklch(0.66 0.225 17);
+  --nessa-activity-ring-1-ink: oklch(0.72 0.17 17);
+  --nessa-activity-ring-2: oklch(0.87 0.225 131);
+  --nessa-activity-ring-2-ink: oklch(0.84 0.21 131);
+  --nessa-activity-ring-3: oklch(0.81 0.13 205);
+  --nessa-activity-ring-3-ink: oklch(0.8 0.125 205);
+  --nessa-activity-ring-cap-shadow: oklch(0 0 0 / 0.55);
+  --nessa-diff-addition: oklch(0.77 0.17 152);
+  --nessa-diff-deletion: oklch(0.7 0.19 25);
+  /* 65%, not 40%: the invalid ring is a required non-text boundary, and the
+     dark destructive at 40% composites to 1.96:1 against the surfaces it is
+     drawn on. */
+  --nessa-invalid-ring: color-mix(in oklab, var(--destructive) 65%, transparent);
+  --nessa-diff-dark-addition: oklch(0.6222 0.1661 146.22);
+  --nessa-market-gain: oklch(0.8 0.19 150);
+  --nessa-market-loss: oklch(0.7 0.19 25);
+}
+
+/* Constrained UI scale. The private factor keeps nested scopes and consumer
+   baseline overrides composable without a selector cross-product: a scope
+   that does not set the attribute inherits the active factor, while every
+   scope recomputes its aliases locally. */
+:where(:root, [data-nessa-root]) {
+  --_nessa-scale-factor: 1;
+}
+
+:where([data-nessa-scale="90"]) {
+  --_nessa-scale-factor: 0.9;
+}
+
+:where([data-nessa-scale="95"]) {
+  --_nessa-scale-factor: 0.95;
+}
+
+:where([data-nessa-scale="100"]) {
+  --_nessa-scale-factor: 1;
+}
+
+:where([data-nessa-scale="105"]) {
+  --_nessa-scale-factor: 1.05;
+}
+
+:where([data-nessa-scale="110"]) {
+  --_nessa-scale-factor: 1.1;
+}
+
+:where([data-nessa-scale="125"]) {
+  --_nessa-scale-factor: 1.25;
+}
+
+:where(
+  :root,
+  [data-nessa-root],
+  [data-nessa-theme],
+  [data-nessa-scale]
+) {
+  --_nessa-font-size-1:
+    calc(var(--nessa-font-size-1) * var(--_nessa-scale-factor));
+  --_nessa-font-size-2:
+    calc(var(--nessa-font-size-2) * var(--_nessa-scale-factor));
+  --_nessa-font-size-3:
+    calc(var(--nessa-font-size-3) * var(--_nessa-scale-factor));
+  --_nessa-font-size-4:
+    calc(var(--nessa-font-size-4) * var(--_nessa-scale-factor));
+  --_nessa-font-size-5:
+    calc(var(--nessa-font-size-5) * var(--_nessa-scale-factor));
+  --_nessa-font-size-6:
+    calc(var(--nessa-font-size-6) * var(--_nessa-scale-factor));
+  --_nessa-font-size-7:
+    calc(var(--nessa-font-size-7) * var(--_nessa-scale-factor));
+  --_nessa-line-height-1: var(--nessa-line-height-1);
+  --_nessa-line-height-2: var(--nessa-line-height-2);
+  --_nessa-line-height-3: var(--nessa-line-height-3);
+  --_nessa-line-height-4: var(--nessa-line-height-4);
+  --_nessa-line-height-5: var(--nessa-line-height-5);
+  --_nessa-line-height-6: var(--nessa-line-height-6);
+  --_nessa-line-height-7: var(--nessa-line-height-7);
+  --_nessa-letter-spacing-1: var(--nessa-letter-spacing-1);
+  --_nessa-letter-spacing-2: var(--nessa-letter-spacing-2);
+  --_nessa-letter-spacing-3: var(--nessa-letter-spacing-3);
+  --_nessa-letter-spacing-4: var(--nessa-letter-spacing-4);
+  --_nessa-letter-spacing-5: var(--nessa-letter-spacing-5);
+  --_nessa-letter-spacing-6: var(--nessa-letter-spacing-6);
+  --_nessa-letter-spacing-7: var(--nessa-letter-spacing-7);
+}
+
+/* Geometry follows the same factor. Tailwind v4 sizing utilities resolve
+   `--spacing` at the element that uses them, so redeclaring it per scope
+   scales padding, gaps, and control geometry in lockstep with type —
+   no component opts in individually. Radii, border widths, focus rings,
+   and motion stay pinned to their own tokens on purpose. The bare `:root`
+   (not `:where`) outranks Tailwind's own `:root, :host` declaration
+   earlier in the shared theme layer. */
+:root,
+:where([data-nessa-root], [data-nessa-theme], [data-nessa-scale]) {
+  --spacing: calc(0.25rem * var(--_nessa-scale-factor));
+}
+
+/* Constrained UI scale. The private factor keeps nested scopes and consumer
+   baseline overrides composable without a selector cross-product: a scope
+   that does not set the attribute inherits the active factor, while every
+   scope recomputes its aliases locally. */
+:where(:root, [data-nessa-root]) {
+  --_nessa-scale-factor: 1;
+}
+
+:where([data-nessa-scale="90"]) {
+  --_nessa-scale-factor: 0.9;
+}
+
+:where([data-nessa-scale="95"]) {
+  --_nessa-scale-factor: 0.95;
+}
+
+:where([data-nessa-scale="100"]) {
+  --_nessa-scale-factor: 1;
+}
+
+:where([data-nessa-scale="105"]) {
+  --_nessa-scale-factor: 1.05;
+}
+
+:where([data-nessa-scale="110"]) {
+  --_nessa-scale-factor: 1.1;
+}
+
+:where(
+  :root,
+  [data-nessa-root],
+  [data-nessa-theme],
+  [data-nessa-scale]
+) {
+  --_nessa-font-size-1:
+    calc(var(--nessa-font-size-1) * var(--_nessa-scale-factor));
+  --_nessa-font-size-2:
+    calc(var(--nessa-font-size-2) * var(--_nessa-scale-factor));
+  --_nessa-font-size-3:
+    calc(var(--nessa-font-size-3) * var(--_nessa-scale-factor));
+  --_nessa-font-size-4:
+    calc(var(--nessa-font-size-4) * var(--_nessa-scale-factor));
+  --_nessa-font-size-5:
+    calc(var(--nessa-font-size-5) * var(--_nessa-scale-factor));
+  --_nessa-font-size-6:
+    calc(var(--nessa-font-size-6) * var(--_nessa-scale-factor));
+  --_nessa-font-size-7:
+    calc(var(--nessa-font-size-7) * var(--_nessa-scale-factor));
+  --_nessa-line-height-1: var(--nessa-line-height-1);
+  --_nessa-line-height-2: var(--nessa-line-height-2);
+  --_nessa-line-height-3: var(--nessa-line-height-3);
+  --_nessa-line-height-4: var(--nessa-line-height-4);
+  --_nessa-line-height-5: var(--nessa-line-height-5);
+  --_nessa-line-height-6: var(--nessa-line-height-6);
+  --_nessa-line-height-7: var(--nessa-line-height-7);
+  --_nessa-letter-spacing-1: var(--nessa-letter-spacing-1);
+  --_nessa-letter-spacing-2: var(--nessa-letter-spacing-2);
+  --_nessa-letter-spacing-3: var(--nessa-letter-spacing-3);
+  --_nessa-letter-spacing-4: var(--nessa-letter-spacing-4);
+  --_nessa-letter-spacing-5: var(--nessa-letter-spacing-5);
+  --_nessa-letter-spacing-6: var(--nessa-letter-spacing-6);
+  --_nessa-letter-spacing-7: var(--nessa-letter-spacing-7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root,
+  :where([data-nessa-root], [data-nessa-theme], [data-nessa-scale]) {
+    --nessa-motion-duration-fast: 0ms;
+    --nessa-motion-duration-normal: 0ms;
+    --nessa-motion-duration-slow: 0ms;
+    --nessa-motion-duration-ambient: 0ms;
+  }
+}
+
+@theme inline {
+  --font-sans: var(--nessa-font-sans);
+  --font-mono: var(--nessa-font-mono);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --radius-xs: calc(var(--radius) * 0.5);
+  --radius-sm: calc(var(--radius) * 0.75);
+  --radius-md: calc(var(--radius) * 0.875);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.5);
+  --animate-nessa-enter: nessa-enter var(--nessa-motion-duration-normal)
+    var(--nessa-motion-easing-standard) both;
+
+  /* Entrance for content that appears in place (palettes, callouts):
+     opacity plus the individual scale property, never transform, so a
+     positioned element's own translate stays untouched. The duration
+     token collapses to 0ms under reduced motion. */
+  @keyframes nessa-enter {
+    from {
+      opacity: 0;
+      scale: 0.96;
+    }
+  }
+}

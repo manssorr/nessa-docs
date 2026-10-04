@@ -1,0 +1,782 @@
+{
+  "date": "2026-10-04",
+  "platform": "macOS",
+  "node": "26.8.1",
+  "status": "reverted",
+  "reason": "Warm measurements under concurrent browser verification remained inconclusive; no speed claim.",
+  "configuration": {
+    "samplesPerEngine": 5,
+    "chromiumCpuThrottle": 4,
+    "webkitCpuThrottle": null,
+    "build": "production",
+    "load": "concurrent full renderer verification"
+  },
+  "before": {
+    "script": "startup-profile",
+    "label": "before",
+    "base": "http://127.0.0.1:4324",
+    "document": "host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+    "samples": 5,
+    "results": [
+      {
+        "engine": "chromium",
+        "cpuThrottle": 4,
+        "cold": {
+          "median": 3052.5999999940395,
+          "max": 4054.5
+        },
+        "warm": {
+          "median": 1319.7000000029802,
+          "max": 2067.4000000059605
+        },
+        "readings": [
+          {
+            "run": 0,
+            "renderedAt": 3052.5999999940395,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 436.8999999985099,
+                "end": 438.5
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 486.8999999985099,
+                "end": 503.3999999985099
+              },
+              {
+                "path": "/api/catalog",
+                "start": 518.3999999985099,
+                "end": 582.5
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 637.2999999970198,
+                "end": 731.5999999940395
+              },
+              {
+                "path": "/assets/mermaid.core-DUcIDlb6.js",
+                "start": 833.5999999940395,
+                "end": 851.2999999970198
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 1319.7000000029802
+          },
+          {
+            "run": 1,
+            "renderedAt": 3495.2999999970198,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 569,
+                "end": 607.7999999970198
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 631.6000000014901,
+                "end": 633.2999999970198
+              },
+              {
+                "path": "/api/catalog",
+                "start": 668.3999999985099,
+                "end": 788.7000000029802
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 856.7999999970198,
+                "end": 938.8999999985099
+              },
+              {
+                "path": "/assets/mermaid.core-DUcIDlb6.js",
+                "start": 1048.2000000029802,
+                "end": 1050.8999999985099
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 1237.2999999970198
+          },
+          {
+            "run": 2,
+            "renderedAt": 2739.3000000044703,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 424.20000000298023,
+                "end": 425.30000000447035
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 470.3999999985099,
+                "end": 492.20000000298023
+              },
+              {
+                "path": "/api/catalog",
+                "start": 506.6000000014901,
+                "end": 595.8000000044703
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 640.7000000029802,
+                "end": 710
+              },
+              {
+                "path": "/assets/mermaid.core-DUcIDlb6.js",
+                "start": 805.3999999985099,
+                "end": 810.8000000044703
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 2067.4000000059605
+          },
+          {
+            "run": 3,
+            "renderedAt": 4054.5,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 568.2999999970198,
+                "end": 571
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 629.5,
+                "end": 632.3999999985099
+              },
+              {
+                "path": "/api/catalog",
+                "start": 668.1999999955297,
+                "end": 1057.3999999985099
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 1129.2999999970198,
+                "end": 1328
+              },
+              {
+                "path": "/assets/mermaid.core-DUcIDlb6.js",
+                "start": 1435.8999999985099,
+                "end": 1440.5
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 1431.7000000029802
+          },
+          {
+            "run": 4,
+            "renderedAt": 2650.5999999940395,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 420.09999999403954,
+                "end": 421.09999999403954
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 465.09999999403954,
+                "end": 498.19999999552965
+              },
+              {
+                "path": "/api/catalog",
+                "start": 508.3999999985099,
+                "end": 573.6999999955297
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 630.6999999955297,
+                "end": 688.0999999940395
+              },
+              {
+                "path": "/assets/mermaid.core-DUcIDlb6.js",
+                "start": 778.1999999955297,
+                "end": 782.5
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 1205.2999999970198
+          }
+        ]
+      },
+      {
+        "engine": "webkit",
+        "cpuThrottle": null,
+        "cold": {
+          "median": 1734,
+          "max": 2166
+        },
+        "warm": {
+          "median": 362,
+          "max": 426
+        },
+        "readings": [
+          {
+            "run": 0,
+            "renderedAt": 2166,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 703,
+                "end": 706
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 724,
+                "end": 728
+              },
+              {
+                "path": "/api/catalog",
+                "start": 746,
+                "end": 853
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 882,
+                "end": 1028
+              },
+              {
+                "path": "/assets/mermaid.core-DUcIDlb6.js",
+                "start": 1061,
+                "end": 1076
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 300
+          },
+          {
+            "run": 1,
+            "renderedAt": 1734,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 337,
+                "end": 339
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 360,
+                "end": 362
+              },
+              {
+                "path": "/api/catalog",
+                "start": 378,
+                "end": 434
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 462,
+                "end": 560
+              },
+              {
+                "path": "/assets/mermaid.core-DUcIDlb6.js",
+                "start": 587,
+                "end": 612
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 362
+          },
+          {
+            "run": 2,
+            "renderedAt": 1870,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 407,
+                "end": 409
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 422,
+                "end": 423
+              },
+              {
+                "path": "/api/catalog",
+                "start": 438,
+                "end": 559
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 585,
+                "end": 667
+              },
+              {
+                "path": "/assets/mermaid.core-DUcIDlb6.js",
+                "start": 700,
+                "end": 719
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 426
+          },
+          {
+            "run": 3,
+            "renderedAt": 1177,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 343,
+                "end": 345
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 358,
+                "end": 390
+              },
+              {
+                "path": "/api/catalog",
+                "start": 397,
+                "end": 454
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 475,
+                "end": 526
+              },
+              {
+                "path": "/assets/mermaid.core-DUcIDlb6.js",
+                "start": 553,
+                "end": 566
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 371
+          },
+          {
+            "run": 4,
+            "renderedAt": 1102,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 285,
+                "end": 287
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 293,
+                "end": 294
+              },
+              {
+                "path": "/api/catalog",
+                "start": 301,
+                "end": 346
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 367,
+                "end": 422
+              },
+              {
+                "path": "/assets/mermaid.core-DUcIDlb6.js",
+                "start": 445,
+                "end": 471
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 283
+          }
+        ]
+      }
+    ]
+  },
+  "candidate": {
+    "script": "startup-profile",
+    "label": "after",
+    "base": "http://127.0.0.1:4325",
+    "document": "host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+    "samples": 5,
+    "results": [
+      {
+        "engine": "chromium",
+        "cpuThrottle": 4,
+        "cold": {
+          "median": 2875.60000000149,
+          "max": 3468.5
+        },
+        "warm": {
+          "median": 1190.2999999970198,
+          "max": 1972.3999999985099
+        },
+        "readings": [
+          {
+            "run": 0,
+            "renderedAt": 3468.5,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 274.20000000298023,
+                "end": 278.1000000014901
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 372.79999999701977,
+                "end": 375.3999999985099
+              },
+              {
+                "path": "/api/catalog",
+                "start": 408,
+                "end": 729
+              },
+              {
+                "path": "/assets/mermaid.core-BmjCGYDm.js",
+                "start": 411.29999999701977,
+                "end": 414.29999999701977
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 801.8999999985099,
+                "end": 1064.6000000014901
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 1047
+          },
+          {
+            "run": 1,
+            "renderedAt": 3329.10000000149,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 511.80000000447035,
+                "end": 513
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 579.2000000029802,
+                "end": 580.5
+              },
+              {
+                "path": "/api/catalog",
+                "start": 609.5,
+                "end": 743.1000000014901
+              },
+              {
+                "path": "/assets/mermaid.core-BmjCGYDm.js",
+                "start": 613.7000000029802,
+                "end": 616.5
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 844.7000000029802,
+                "end": 946
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 1190.2999999970198
+          },
+          {
+            "run": 2,
+            "renderedAt": 1962.7999999970198,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 294,
+                "end": 295.70000000298023
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 387.70000000298023,
+                "end": 389
+              },
+              {
+                "path": "/api/catalog",
+                "start": 404.8999999985099,
+                "end": 470.6000000014901
+              },
+              {
+                "path": "/assets/mermaid.core-BmjCGYDm.js",
+                "start": 407.6000000014901,
+                "end": 410
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 531.3999999985099,
+                "end": 576.3999999985099
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 1972.3999999985099
+          },
+          {
+            "run": 3,
+            "renderedAt": 2875.60000000149,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 447.70000000298023,
+                "end": 450.70000000298023
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 502.20000000298023,
+                "end": 504.1000000014901
+              },
+              {
+                "path": "/api/catalog",
+                "start": 525.6000000014901,
+                "end": 634.4000000059605
+              },
+              {
+                "path": "/assets/mermaid.core-BmjCGYDm.js",
+                "start": 528.9000000059605,
+                "end": 530.8000000044703
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 706.4000000059605,
+                "end": 800.8000000044703
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 1927.2999999970198
+          },
+          {
+            "run": 4,
+            "renderedAt": 1913,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 317.5,
+                "end": 319.70000000298023
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 413.5,
+                "end": 417.3999999985099
+              },
+              {
+                "path": "/api/catalog",
+                "start": 458.20000000298023,
+                "end": 545.5
+              },
+              {
+                "path": "/assets/mermaid.core-BmjCGYDm.js",
+                "start": 461.20000000298023,
+                "end": 465.30000000447035
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 614.1000000014901,
+                "end": 675.7000000029802
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 1018.1000000014901
+          }
+        ]
+      },
+      {
+        "engine": "webkit",
+        "cpuThrottle": null,
+        "cold": {
+          "median": 1345,
+          "max": 1829
+        },
+        "warm": {
+          "median": 420,
+          "max": 1071
+        },
+        "readings": [
+          {
+            "run": 0,
+            "renderedAt": 1359,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 535,
+                "end": 537
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 543,
+                "end": 544
+              },
+              {
+                "path": "/api/catalog",
+                "start": 550,
+                "end": 607
+              },
+              {
+                "path": "/assets/mermaid.core-BmjCGYDm.js",
+                "start": 551,
+                "end": 563
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 627,
+                "end": 664
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 218
+          },
+          {
+            "run": 1,
+            "renderedAt": 1829,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 377,
+                "end": 381
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 393,
+                "end": 397
+              },
+              {
+                "path": "/api/catalog",
+                "start": 416,
+                "end": 528
+              },
+              {
+                "path": "/assets/mermaid.core-BmjCGYDm.js",
+                "start": 417,
+                "end": 438
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 577,
+                "end": 683
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 469
+          },
+          {
+            "run": 2,
+            "renderedAt": 1345,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 469,
+                "end": 471
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 480,
+                "end": 483
+              },
+              {
+                "path": "/api/catalog",
+                "start": 493,
+                "end": 582
+              },
+              {
+                "path": "/assets/mermaid.core-BmjCGYDm.js",
+                "start": 494,
+                "end": 512
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 608,
+                "end": 677
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 414
+          },
+          {
+            "run": 3,
+            "renderedAt": 1213,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 228,
+                "end": 229
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 233,
+                "end": 235
+              },
+              {
+                "path": "/api/catalog",
+                "start": 239,
+                "end": 287
+              },
+              {
+                "path": "/assets/mermaid.core-BmjCGYDm.js",
+                "start": 240,
+                "end": 249
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 299,
+                "end": 339
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 1071
+          },
+          {
+            "run": 4,
+            "renderedAt": 1161,
+            "requests": [
+              {
+                "path": "/api/projects/current",
+                "start": 333,
+                "end": 335
+              },
+              {
+                "path": "/api/projects/current",
+                "start": 341,
+                "end": 343
+              },
+              {
+                "path": "/api/catalog",
+                "start": 351,
+                "end": 429
+              },
+              {
+                "path": "/assets/mermaid.core-BmjCGYDm.js",
+                "start": 353,
+                "end": 366
+              },
+              {
+                "path": "/api/documents/host-startup-authenticate-reconnect-expire-or-revoke-a-surface-session",
+                "start": 460,
+                "end": 531
+              }
+            ],
+            "figures": 1,
+            "failed": 0,
+            "warm": 420
+          }
+        ]
+      }
+    ]
+  },
+  "forcedImportFailureComparison": {
+    "engine": "webkit",
+    "baseline": {
+      "renderedAfterReload": 0,
+      "failedAfterReload": 2,
+      "pageErrors": 0
+    },
+    "candidate": {
+      "renderedAfterReload": 0,
+      "failedAfterReload": 2,
+      "pageErrors": 0
+    },
+    "conclusion": "Identical baseline limitation; no recovery change."
+  }
+}

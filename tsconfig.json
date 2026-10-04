@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": [
+      "ES2023",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "types": [
+      "node",
+      "vite/client"
+    ],
+    "noEmit": true,
+    "paths": {
+      "@nessa-ui/react/*": [
+        "./vendor/nessa-ui/components/*"
+      ]
+    }
+  },
+  "include": [
+    "src",
+    "shared",
+    "server",
+    "vite.config.ts"
+  ]
+}
