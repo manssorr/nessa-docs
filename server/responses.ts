@@ -50,17 +50,17 @@ export async function documentResponse(
     };
   }
   const file = { kind: 'file', file: document.summary.file } as const;
-  const links: Record<string, LinkTarget> = {};
+  const linkEntries: [string, LinkTarget][] = [];
   for (const href of markdownHrefs(document.body)) {
-    links[href] = await resolveReference(href, file, catalog, files);
+    linkEntries.push([href, await resolveReference(href, file, catalog, files)]);
   }
+  const links = Object.fromEntries(linkEntries);
   const sources = [];
   for (const raw of document.sources) {
     sources.push({ raw, target: await resolveReference(raw, { kind: 'repository' }, catalog, files) });
   }
   const crumb = (target: string): Crumb => ({ id: target, title: catalog.documents.get(target)?.summary.title ?? target });
-  const diagramLinks: Record<string, Crumb> = {};
-  for (const [node, target] of document.diagramLinks) diagramLinks[node] = crumb(target);
+  const diagramLinks = Object.fromEntries([...document.diagramLinks].map(([node, target]) => [node, crumb(target)]));
 
   const breadcrumbs: Crumb[] = [];
   for (let current: string | null = id; current !== null; ) {

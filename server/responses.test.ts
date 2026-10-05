@@ -84,6 +84,28 @@ describe('link resolution', () => {
 });
 
 describe('documentResponse', () => {
+  it('preserves accepted reserved and ordinary href/node keys as own JSON entries', async () => {
+    const names = ['__proto__', 'constructor', 'ordinary'];
+    const targets = names.map((name, index) => [name, `child-${index}`] as const);
+    const tree = Object.fromEntries([
+      [`${STATE}/README.md`, doc('nessa', null, { diagramLinks: Object.fromEntries(targets) },
+        '```mermaid\nflowchart LR\n __proto__ --> constructor --> ordinary\n```\n\n' + names.map((name) => `[${name}](${name})`).join(' '))],
+      ...targets.map(([name, id]) => [`${STATE}/${name}/README.md`, doc(id, 'nessa')]),
+    ]);
+    const { catalog, files } = await setup(tree);
+    expect(catalog.issues).toEqual([]);
+    const response = (await documentResponse(catalog, 'nessa', files)) as DocumentResponse;
+    const wire = JSON.parse(JSON.stringify(response)) as DocumentResponse;
+    for (const [name, id] of targets) {
+      expect(Object.hasOwn(response.links, name), name).toBe(true);
+      expect(Object.hasOwn(wire.links, name), name).toBe(true);
+      expect(wire.links[name]).toEqual({ kind: 'document', id, fragment: null });
+      expect(Object.hasOwn(response.diagramLinks, name), name).toBe(true);
+      expect(Object.hasOwn(wire.diagramLinks, name), name).toBe(true);
+      expect(wire.diagramLinks[name]).toEqual({ id, title: `Title ${id}` });
+    }
+  });
+
   it('resolves every body link, the sources, diagram links, breadcrumbs and children', async () => {
     const { catalog, files } = await setup();
     const response = (await documentResponse(catalog, 'chat', files)) as DocumentResponse;

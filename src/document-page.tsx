@@ -223,11 +223,10 @@ function DocumentView({ response, focusOnLoad }: { response: DocumentResponse; f
   }, [selected]);
   // In the inspector a same-page #section link opens that section in Details (Diagrams does not draw the prose).
   const inspectorLinks = useMemo(() => {
-    const links: Record<string, LinkTarget> = {};
-    for (const [href, target] of Object.entries(response.links)) {
-      links[href] = target.kind === 'anchor' ? { kind: 'document', id: document.id, fragment: target.fragment } : target;
-    }
-    return links;
+    return Object.fromEntries<LinkTarget>(Object.entries(response.links).map(([href, target]) => [
+      href,
+      target.kind === 'anchor' ? { kind: 'document', id: document.id, fragment: target.fragment } : target,
+    ]));
   }, [response.links, document.id]);
   const selection =
     selected !== null && response.diagramDetails[selected] ? { key: selected, detail: response.diagramDetails[selected] } : null;

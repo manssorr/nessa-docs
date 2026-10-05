@@ -279,6 +279,7 @@ headless journeys inject adapter outcomes and never open an OS dialog.
 | P13 | Handle h owns A; a different accepted root B mints h | Typed project-id-conflict refusal; A/current/default/capacity remain unchanged; later fresh identity can open B (`projects.test`) |
 | P14 | Explicit requested handle A; current handshake reports opened B | Refuse before reader/title application; matching A remains valid; null discovery may select B; abandoned replies remain ignored (`selection.test`, release-recovery) |
 | P15 | Catalog/document/search headers succeed; body rejects or JSON is malformed | Typed failed result and retry recovery; deliberate abort remains rejection and cannot become visible failure (`api.test`, release-recovery) |
+| P16 | Accepted prose hrefs and diagram node aliases are `__proto__`, `constructor` or ordinary names | Every relationship remains an own property through response JSON and inspector adaptation; Details/inspector links and diagram drilldown preserve the selected project (`responses.test`, reserved-links) |
 | FS1 | Accepted canonical state boundary; persistent root/nested ancestor swap | Refuse observed outside canonical candidate, no accepted external content (`files.test`) |
 | FS2 | Inside pre/post path; intervening open captures different inode | Expected/open dev+ino mismatch refused before allocation/read (`files.test`) |
 | FS3 | File replaced after opening/reading | Post canonical path/containment and identity must match same handle; otherwise refuse (`files.test`) |

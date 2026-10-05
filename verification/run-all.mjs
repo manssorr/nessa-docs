@@ -17,6 +17,7 @@ import { startVerificationServer } from './server.mjs';
 import { runOnboarding } from './onboarding.mjs';
 import { runProjectLayout } from './project-layout.mjs';
 import { runReleaseRecovery } from './release-recovery.mjs';
+import { runReservedLinks } from './reserved-links.mjs';
 import { runBrand } from './brand.mjs';
 import { runDetails } from './details.mjs';
 import { runJourneys } from './journeys.mjs';
@@ -49,6 +50,8 @@ for (const engine of ['chromium', 'webkit']) {
   summary.push({ engine, script: layout.script, scope: 'package', baseUrl: welcome, ok: layout.ok, passed: layout.passed, total: layout.total });
   const recovery = await runReleaseRecovery(engine);
   summary.push({ engine, script: recovery.script, scope: 'package', baseUrl: welcome, ok: recovery.ok, passed: recovery.passed, total: recovery.total });
+  const reserved = await runReservedLinks(engine);
+  summary.push({ engine, script: reserved.script, scope: 'package', ok: reserved.ok, passed: reserved.passed, total: reserved.total });
   process.env.BASE_URL = fixture;
   for (const run of [runJourneys, runResponsive, runSidebarResize]) {
     const r = await run(engine);
