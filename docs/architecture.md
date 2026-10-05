@@ -11,10 +11,12 @@ backend and does not execute the described state machines.
 | `skills/nessa-docs/` | Agent instructions and the repository document format |
 | `shared/` | Markdown structure and API data types shared by reader and server |
 | `server/document.ts`, `catalog.ts`, `diagram-details.ts` | Metadata, hierarchy and target validation |
-| `server/files.ts` | Local filesystem adapter for the injected repository-files port |
+| `server/files.ts` | Local filesystem adapter for the injected repository-files port; checks reads against the catalog's accepted documentation boundary |
+| `server/path-containment.ts` | The path-containment rule used by the catalog, file reader and link resolver |
 | `server/project-opening/` | Validate chosen folders, retain opened project contexts, supply the local folder chooser, and compose the headless checker |
 | `server/http.ts`, `main.ts` | Local HTTP transport and process composition |
 | `src/project-opening/read-port.ts` | Framework-independent project source, read contract and outcomes |
+| `src/project-opening/selection.ts` | Checks that a current-project answer belongs to the requested project |
 | Other `src/project-opening/` files | Welcome flow and React read-context wiring |
 | `src/api.ts` | Local HTTP implementation of the reader's project port |
 | Remaining `src/` | Browsing, Markdown presentation, diagram canvas, inspector and settings |
@@ -37,6 +39,12 @@ Folder selection belongs to the project-opening adapter. The macOS adapter opens
 the native chooser; other supported hosts use path entry for now. Selecting a
 folder fills the field. Catalog validation remains the owner of opening it.
 A future host supplies its own chooser without changing Markdown rendering.
+
+The catalog supplies the accepted `docs/state` boundary when it requests a file.
+The local adapter checks the file's canonical path and identity around the read.
+It refuses content when those checks show a changed file or an escaped path.
+A later reload can retry an ordinary file replacement. These checks do not make
+an atomic snapshot or prove confinement against every coordinated filesystem race.
 
 The format reference inside the skill is the documentation owner of metadata.
 The parser is its implementation. Other guides link the reference instead of

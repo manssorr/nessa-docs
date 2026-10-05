@@ -2,6 +2,7 @@
 // and stable data-* attributes only.
 export const S = {
   projectFolder: '#project-folder',
+  documentFailure: '.page-status[data-page-state="failed"][role="alert"]',
   projectWelcome: '[data-page-state="welcome"]',
   projectOpeningError: '.project-opening-error[role="alert"]',
   openProjectLink: 'a[data-action="open-project"]',

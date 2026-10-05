@@ -271,3 +271,18 @@ headless journeys inject adapter outcomes and never open an OS dialog.
 | --- | --- |
 | Browse displays the native macOS chooser and selecting a folder containing spaces and Unicode fills the exact path and focuses the field; Open validates it | Unverified |
 | Cancelling the native chooser preserves the field and current project and restores field focus | Unverified |
+
+## Release review repair states
+
+| # | State / event | Result / focused evidence |
+| --- | --- | --- |
+| P13 | Handle h owns A; a different accepted root B mints h | Typed project-id-conflict refusal; A/current/default/capacity remain unchanged; later fresh identity can open B (`projects.test`) |
+| P14 | Explicit requested handle A; current handshake reports opened B | Refuse before reader/title application; matching A remains valid; null discovery may select B; abandoned replies remain ignored (`selection.test`, release-recovery) |
+| P15 | Catalog/document/search headers succeed; body rejects or JSON is malformed | Typed failed result and retry recovery; deliberate abort remains rejection and cannot become visible failure (`api.test`, release-recovery) |
+| FS1 | Accepted canonical state boundary; persistent root/nested ancestor swap | Refuse observed outside canonical candidate, no accepted external content (`files.test`) |
+| FS2 | Inside pre/post path; intervening open captures different inode | Expected/open dev+ino mismatch refused before allocation/read (`files.test`) |
+| FS3 | File replaced after opening/reading | Post canonical path/containment and identity must match same handle; otherwise refuse (`files.test`) |
+| FS4 | Unchanged ordinary/space/Unicode candidate | Read bounded regular file and close handle (`files.test`) |
+| FS5 | Final-component symlink, nonregular or oversized opened object | Refuse; no unbounded allocation; every opened handle closes (`files.test`) |
+
+Filesystem checks reject observed path/identity changes; Node pathname operations do not establish an atomic document snapshot or a universal guarantee against coordinated hostile ABA races.

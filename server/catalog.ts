@@ -9,6 +9,7 @@ import { lexMarkdown, markdownDiagrams } from '../shared/markdown.js';
 import { resolveDiagramDetails } from './diagram-details.js';
 import { parseDocumentFile, type ParsedDocument } from './document.js';
 import type { RepositoryFiles } from './files.js';
+import { isInside } from './path-containment.js';
 import { type DiagramReader, readDiagram as readWithMermaid } from './diagram-reader.js';
 
 export const STATE_DIRECTORY = 'docs/state';
@@ -123,7 +124,7 @@ export async function loadCatalog(
           stopped = true;
           return;
         }
-        const read = await files.readText(childAbsolute, limits.maxBytes);
+        const read = await files.readText(childAbsolute, limits.maxBytes, state.realPath);
         if (read.kind === 'text') texts.push({ file: childRelative, text: read.text });
         else if (read.kind === 'too-large') {
           issue(childRelative, 'file-too-large', `${read.size} bytes exceeds the ${limits.maxBytes}-byte limit`);
@@ -323,10 +324,6 @@ export async function loadCatalog(
     rejectedFiles: rejected,
     issues,
   };
-}
-
-export function isInside(path: string, root: string): boolean {
-  return path === root || path.startsWith(root.endsWith('/') ? root : `${root}/`);
 }
 
 function emptyCatalog(repoRoot: string | null, issues: CatalogIssue[]): Catalog {

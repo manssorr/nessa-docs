@@ -3,6 +3,7 @@
 // `readText`), and records every read so tests can prove what was never read.
 
 import { posix } from 'node:path';
+import { isInside } from '../path-containment.js';
 import type { DirectoryEntry, PathInspection, ReadOutcome, RepositoryFiles } from '../files.js';
 
 type Node =
@@ -80,7 +81,8 @@ export function memoryFiles(
       if (!node) return { kind: 'missing' };
       return { kind: node.kind === 'file' ? 'file' : 'directory', realPath: real };
     },
-    async readText(path, maxBytes): Promise<ReadOutcome> {
+    async readText(path, maxBytes, boundary): Promise<ReadOutcome> {
+      if (!isInside(path, boundary)) return { kind: 'unreadable', reason: 'outside docs/state' };
       reads.push(path);
       const node = nodes.get(path);
       if (!node) return { kind: 'unreadable', reason: 'ENOENT' };

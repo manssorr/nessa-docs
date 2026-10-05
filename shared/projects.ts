@@ -8,7 +8,7 @@ export interface Project {
 export type ProjectOutcome =
   | { readonly kind: 'opened'; readonly project: Project }
   | { readonly kind: 'welcome' }
-  | { readonly kind: 'refused'; readonly error: 'invalid-path' | 'invalid-project' | 'project-unavailable' | 'project-capacity' | 'project-read-failed'; readonly message: string; readonly issues: readonly CatalogIssue[] };
+  | { readonly kind: 'refused'; readonly error: 'invalid-path' | 'invalid-project' | 'project-unavailable' | 'project-capacity' | 'project-read-failed' | 'project-id-conflict'; readonly message: string; readonly issues: readonly CatalogIssue[] };
 
 /** The path syntax owner, shared by startup configuration and project opening. */
 export function projectPath(value: unknown): string | null {

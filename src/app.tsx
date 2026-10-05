@@ -6,6 +6,7 @@ import { type CSSProperties, useCallback, useEffect, useMemo, useContext, useRef
 import type { CatalogResponse } from '../shared/api';
 import type { ProjectOutcome } from '../shared/projects';
 import { ProjectContext } from './project-opening/project-context';
+import { loadProjectSelection } from './project-opening/selection';
 import type { ProjectSource } from './project-opening/read-port';
 import { OpenProject } from './project-opening/open-project';
 import { DocumentPage, IssueList } from './document-page';
@@ -41,7 +42,7 @@ function ProjectSelection({ id, source }: { id: string | null; source: ProjectSo
   const [state, setState] = useState<ProjectOutcome | null>(null);
   useEffect(() => {
     const controller = new AbortController();
-    source.current(id, controller.signal).then((next) => {
+    loadProjectSelection(source, id, controller.signal).then((next) => {
       if (controller.signal.aborted) return;
       if (next.kind === 'opened' && id === null) selectProject(next.project.id, true);
       else setState(next);

@@ -5,7 +5,8 @@
 
 import { posix } from 'node:path';
 import type { LinkTarget } from '../shared/api.js';
-import { type Catalog, isInside, STATE_DIRECTORY } from './catalog.js';
+import { type Catalog, STATE_DIRECTORY } from './catalog.js';
+import { isInside } from './path-containment.js';
 import type { RepositoryFiles } from './files.js';
 
 const ALLOWED_SCHEMES = new Set(['http:', 'https:', 'mailto:']);

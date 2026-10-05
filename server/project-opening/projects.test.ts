@@ -87,3 +87,26 @@ it('interprets local absolute paths with one syntax owner', () => {
   expect(projectPath('///')).toBe('/');
   expect(projectPath('relative')).toBeNull();
 });
+
+it('P13 refuses minted identity collisions without retargeting defaults or consuming capacity', async () => {
+  const files = memoryFiles({ ...validTree(), '/other/docs/state/README.md': doc('nessa', null, { title: 'Other project' }) });
+  const ids = ['same', 'same', 'fresh']; let calls = 0;
+  const projects = createProjects({ loadCatalog: (root) => loadCatalog(files, root), mintId: () => ids[calls++]! }, 2);
+  await projects.start(REPO);
+  const initial = await projects.current(null);
+  expect(await projects.open('/other')).toMatchObject({ kind: 'refused', error: 'project-id-conflict' });
+  expect(projects.read('same')).toEqual({ kind: 'selected', root: REPO });
+  expect(await projects.current('same')).toEqual(initial); expect(await projects.current(null)).toEqual(initial);
+  expect(await projects.open('/other')).toMatchObject({ kind: 'opened', project: { id: 'fresh', title: 'Other project' } });
+  expect(projects.read('fresh')).toEqual({ kind: 'selected', root: '/other' }); expect(calls).toBe(3);
+});
+
+it('P13 overlapping distinct accepted roots cannot retarget a repeated identity', async () => {
+  const files = memoryFiles({ ...validTree(), '/other/docs/state/README.md': doc('nessa', null) });
+  const projects = createProjects({ loadCatalog: (root) => loadCatalog(files, root), mintId: () => 'same' });
+  const outcomes = await Promise.all([projects.open(REPO), projects.open('/other')]);
+  const acceptedIndex = outcomes.findIndex((o) => o.kind === 'opened');
+  expect(outcomes.filter((o) => o.kind === 'opened')).toHaveLength(1);
+  expect(outcomes.filter((o) => o.kind === 'refused')).toEqual([expect.objectContaining({ error: 'project-id-conflict' })]);
+  expect(projects.read('same')).toEqual({ kind: 'selected', root: [REPO,'/other'][acceptedIndex] });
+});

@@ -31,3 +31,21 @@ it('the folder adapter preserves chosen paths and reports malformed or unavailab
   const malformed = createHttpProjectSource(async () => new Response(JSON.stringify({ kind: 'selected', path: false })));
   expect(await malformed.pickerStatus()).toMatchObject({ kind: 'unsupported' }); expect(await malformed.chooseFolder()).toMatchObject({ kind: 'failed' });
 });
+
+it('P15 catalog, document and search body faults are typed and a subsequent read recovers', async () => {
+  for (const operation of ['catalog','document','search'] as const) for (const fault of ['malformed','truncated']) {
+    let attempts = 0;
+    const source = createHttpProjectSource(async () => ++attempts > 1 ? new Response('{"version":"recovered"}') : fault === 'malformed' ? new Response('{"version":') : new Response(new ReadableStream({ start(controller) { controller.error(new Error('body truncated after headers')); } })));
+    const reads = source.reads('project');
+    const read = () => operation === 'catalog' ? reads.catalog() : operation === 'document' ? reads.document('root') : reads.search('query');
+    expect(await read()).toMatchObject({ kind: 'failed', message: expect.stringContaining('unreadable response') });
+    expect(await read()).toEqual({ kind: 'ok', value: { version: 'recovered' } });
+  }
+});
+it('P15 deliberate cancellation while consuming the body remains a rejection', async () => {
+  const controller = new AbortController(); let failBody!: (cause: Error) => void;
+  const source = createHttpProjectSource(async () => new Response(new ReadableStream({ start(body) { failBody = (cause) => body.error(cause); } })));
+  const reading = source.reads('project').catalog(controller.signal);
+  await Promise.resolve(); controller.abort(); failBody(new Error('cancelled body'));
+  await expect(reading).rejects.toThrow('cancelled body');
+});

@@ -20,7 +20,11 @@ async function getJson<T>(path: string, signal: AbortSignal | undefined, request
   }
   if (response.status === 409) return { kind: 'failed', message: 'This project is no longer open. Open its folder again.' };
   if (!response.ok) return { kind: 'failed', message: `The server answered ${response.status} for ${path}` };
-  return { kind: 'ok', value: (await response.json()) as T };
+  try { return { kind: 'ok', value: (await response.json()) as T }; }
+  catch (error) {
+    if (signal?.aborted) throw error;
+    return { kind: 'failed', message: 'The server returned an unreadable response. Try again.' };
+  }
 }
 
 /** Browser HTTP adapter. Renderers consume ProjectReads without host selection. */

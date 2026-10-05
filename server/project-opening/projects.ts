@@ -33,6 +33,7 @@ export function createProjects(dependencies: ProjectDependencies, capacity = 128
     for (const [id, root] of roots) if (root.root === catalog.repoRoot) return { kind: 'opened', project: { id, title } };
     if (roots.size >= capacity) return { kind: 'refused', error: 'project-capacity', message: 'The server has reached its open-project limit. Restart it to open more folders.', issues: [] };
     const id = dependencies.mintId();
+    if (roots.has(id)) return { kind: 'refused', error: 'project-id-conflict', message: 'A new project identity could not be assigned. Try opening the folder again.', issues: [] };
     roots.set(id, { root: catalog.repoRoot, title });
     return { kind: 'opened', project: { id, title } };
   };

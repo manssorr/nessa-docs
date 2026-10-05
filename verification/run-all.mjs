@@ -16,6 +16,7 @@ import { fileURLToPath } from 'node:url';
 import { startVerificationServer } from './server.mjs';
 import { runOnboarding } from './onboarding.mjs';
 import { runProjectLayout } from './project-layout.mjs';
+import { runReleaseRecovery } from './release-recovery.mjs';
 import { runBrand } from './brand.mjs';
 import { runDetails } from './details.mjs';
 import { runJourneys } from './journeys.mjs';
@@ -46,6 +47,8 @@ for (const engine of ['chromium', 'webkit']) {
   summary.push({ engine, script: onboarding.script, scope: 'package', baseUrl: welcome, ok: onboarding.ok, passed: onboarding.passed, total: onboarding.total });
   const layout = await runProjectLayout(engine);
   summary.push({ engine, script: layout.script, scope: 'package', baseUrl: welcome, ok: layout.ok, passed: layout.passed, total: layout.total });
+  const recovery = await runReleaseRecovery(engine);
+  summary.push({ engine, script: recovery.script, scope: 'package', baseUrl: welcome, ok: recovery.ok, passed: recovery.passed, total: recovery.total });
   process.env.BASE_URL = fixture;
   for (const run of [runJourneys, runResponsive, runSidebarResize]) {
     const r = await run(engine);
