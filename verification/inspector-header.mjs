@@ -1,5 +1,5 @@
 // Authored inspector text uses its own direction and shares the body's
-// content edges. Chrome controls keep the UI direction and remain reachable.
+// content edges. Title and close share row one; subtitle and Badge share row two.
 import assert from 'node:assert/strict';
 import {fileURLToPath} from 'node:url';
 import {mkdirSync} from 'node:fs';
@@ -46,24 +46,30 @@ try {
       const facts = await dialog.evaluate(element => {
         const rect = selector => {
           const e = element.querySelector(selector), r = e.getBoundingClientRect(), style = getComputedStyle(e);
-          return {x:r.x, right:r.right, y:r.y, bottom:r.bottom, direction:style.direction};
+          return {x:r.x, right:r.right, y:r.y, bottom:r.bottom, direction:style.direction, radius:style.borderRadius, background:style.backgroundColor};
         };
         const body = element.querySelector('.inspector-body');
         const box = body.getBoundingClientRect(), style = getComputedStyle(body);
         const close = element.querySelector('.inspector-close'), c = close.getBoundingClientRect();
-        return {title:rect('.inspector-title'), relation:rect('.inspector-relation'), label:rect('.inspector-label'),
+        return {title:rect('.inspector-title'), relation:rect('.inspector-relation'), label:rect('.inspector-label'), badge:rect('.inspector-kind'),
           bodyLeft:box.left+parseFloat(style.paddingLeft), bodyRight:box.right-parseFloat(style.paddingRight),
           close:rect('.inspector-close'), closeReachable:close.contains(document.elementFromPoint(c.x+c.width/2,c.y+c.height/2)),
           pageOverflow:document.documentElement.scrollWidth-innerWidth};
       });
       try {
-        assert.ok(Math.abs(facts.title.x-facts.bodyLeft)<2, JSON.stringify(facts));
-        assert.ok(Math.abs(facts.title.right-facts.bodyRight)<2);
+        assert.ok(Math.abs(Math.min(facts.title.x,facts.close.x)-facts.bodyLeft)<2, JSON.stringify(facts));
+        assert.ok(Math.abs(Math.max(facts.title.right,facts.close.right)-facts.bodyRight)<2);
+        assert.ok(facts.title.right<=facts.close.x || facts.close.right<=facts.title.x);
+        assert.ok(Math.abs(facts.title.y-facts.close.y)<2);
+        assert.ok(Math.abs((facts.badge.y+facts.badge.bottom)/2-(facts.relation.y+facts.relation.bottom)/2)<2);
+        assert.ok(Math.abs(facts.badge.right-facts.bodyRight)<2);
+        assert.ok(parseFloat(facts.badge.radius)>100);
+        assert.notEqual(facts.badge.background,'rgba(0, 0, 0, 0)');
         assert.ok(Math.abs(facts.relation.x-facts.bodyLeft)<2);
         assert.ok(Math.abs(facts.label.x-facts.bodyLeft)<2);
         assert.equal(facts.title.direction, authored === 'ar' ? 'rtl' : 'ltr');
         assert.equal(facts.label.direction, authored === 'ar' ? 'rtl' : 'ltr');
-        assert.ok(facts.title.y >= facts.close.bottom);
+        assert.ok(facts.relation.y >= Math.max(facts.title.bottom,facts.close.bottom));
         assert.equal(facts.closeReachable,true);
         assert.equal(facts.pageOverflow,0);
         assert.deepEqual(errors,[]);

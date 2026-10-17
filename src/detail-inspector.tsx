@@ -11,6 +11,7 @@ import { t, useLanguage } from './i18n';
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import type { Token } from 'marked';
 import { X } from 'lucide-react';
+import { Badge } from '@nessa-ui/react/badge';
 import type { Crumb, DiagramDetail, LinkTarget } from '../shared/api';
 import { type MarkdownSection, markdownDiagrams } from '../shared/markdown';
 import { chartAnchor, ELEMENT_NAMES } from './diagram';
@@ -171,23 +172,21 @@ export function DetailInspector({
       {selection && section && target ? (
         <div className="inspector-frame" data-detail-key={selection.key}>
           <header className="inspector-head">
-            <p className="inspector-kind">{t(ELEMENT_NAMES[selection.detail.family][target.kind])}</p>
             <h2 id={titleId} ref={heading} tabIndex={-1} className="inspector-title" dir="auto">
               {section.title}
             </h2>
             <IconButton label={t("Close details")} onClick={onClose} data-action="close-details" className="inspector-close">
               <X />
             </IconButton>
-            {target.kind === 'edge' ? (
-              <p className="inspector-element" dir="auto" data-testid="inspector-element">
+            <div className="inspector-element" dir="auto" data-testid="inspector-element">
+              {target.kind === 'edge' ? (
                 <span className="inspector-relation" dir="ltr"><code>{target.from}</code> → <code>{target.to}</code></span>
-                <span className="inspector-label" dir="auto">{target.label}</span>
-              </p>
-            ) : (
-              <p className="inspector-element" dir="auto" data-testid="inspector-element">
-                <code>{target.node}</code>
-              </p>
-            )}
+              ) : <code>{target.node}</code>}
+              <Badge className="inspector-kind" variant="secondary" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+                {t(ELEMENT_NAMES[selection.detail.family][target.kind])}
+              </Badge>
+            </div>
+            {target.kind === 'edge' ? <p className="inspector-label" dir="auto">{target.label}</p> : null}
             {linked ? (
               <AppLink to={documentPath(linked.id)} className="inspector-open" data-action="open-linked-document">{t("Open")} <bdi>{linked.title}</bdi>
               </AppLink>

@@ -1339,22 +1339,12 @@ figure {
   padding: 14px 18px 10px;
   border-bottom: 1px solid var(--hairline);
 }
-.inspector-kind {
+.inspector-title {
   grid-column: 1;
   grid-row: 1;
-  align-self: center;
-  margin: 0;
-  color: var(--muted);
-  font-size: var(--text-caption);
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-}
-.inspector-title {
-  grid-column: 1 / -1;
-  grid-row: 2;
   min-width: 0;
   overflow-wrap: anywhere;
-  margin: 2px 0 0;
+  margin: 0;
   font-size: 16px;
   font-weight: 600;
   line-height: 1.35;
@@ -1371,16 +1361,19 @@ figure {
 .inspector-element {
   grid-column: 1 / -1;
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 0;
   gap: 4px 6px;
   margin: 8px 0 0;
   color: var(--muted);
   font-size: var(--text-small);
 }
 .inspector-label {
-  flex-basis: 100%;
+  grid-column: 1 / -1;
+  margin: 4px 0 0;
   color: var(--ink-2);
+  font-size: var(--text-small);
 }
 .inspector-open {
   grid-column: 1 / -1;
@@ -1939,4 +1932,4 @@ pre, code { text-align: left; }
 .shell[data-narrow] .project-brand {
   max-width: max(0px, calc(var(--app-bar-w) - 52px));
 }
-.inspector-relation { unicode-bidi: isolate; }
+.inspector-relation { min-width: 0; overflow-wrap: anywhere; unicode-bidi: isolate; }
