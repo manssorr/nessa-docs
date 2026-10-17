@@ -64,7 +64,7 @@ function GeneralSettings({ projectTitle }: { projectTitle: string | null }) {
     <>
     <SettingsGroup title={language === 'ar' ? 'اللغة' : 'Language'}>
       <SettingsRow label={language === 'ar' ? 'لغة الواجهة' : 'Interface language'} control={
-        <SegmentedControl aria-label="Language" value={language} onValueChange={value => setLanguage(value === 'ar' ? 'ar' : 'en')}>
+        <SegmentedControl aria-label={t("Language")} value={language} onValueChange={value => setLanguage(value === 'ar' ? 'ar' : 'en')}>
           <SegmentedControlOption value="en" data-language-option="en"><span lang="en" dir="ltr">English</span></SegmentedControlOption>
           <SegmentedControlOption value="ar" data-language-option="ar"><span lang="ar" dir="rtl">العربية</span></SegmentedControlOption>
         </SegmentedControl>

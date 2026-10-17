@@ -94,7 +94,7 @@
   "outside repo": "خارج المستودع",
   "unresolved": "غير محلول",
   "warning": "تحذير",
-  "source": "المصدر",
+  "source": "مصدر",
   "documents accepted": "وثائق مقبولة",
   "No accepted document in docs/state has this ID. Nothing else is shown in its place.": "لا توجد وثيقة مقبولة بهذا المعرّف في docs/state. لن تُعرض وثيقة أخرى مكانها.",
   "A file declares this ID, but it was rejected:": "يوجد ملف بهذا المعرّف لكنه رُفض:",
@@ -158,5 +158,7 @@
   "Browse the architecture and behavior of your project. Install the nessa-docs skill and use": "تصفح بنية مشروعك وسلوكه. ثبّت مهارة nessa-docs واستخدم",
   "with your coding agent to create": "مع وكيل البرمجة لإنشاء",
   ", then open your project folder here.": "، ثم افتح مجلد المشروع هنا.",
-  "Reading docs/state…": "جارٍ قراءة docs/state…"
+  "Reading docs/state…": "جارٍ قراءة docs/state…",
+  "warnings": "تحذيرات",
+  "sources": "مصادر"
 }

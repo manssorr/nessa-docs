@@ -260,7 +260,7 @@ figure {
   width: 12px;
   cursor: col-resize;
   touch-action: none;
-  transition: left 240ms var(--ease);
+  transition: inset-inline-start 240ms var(--ease);
 }
 .shell[data-resizing] .sidebar-resizer {
   transition: none;
@@ -1420,7 +1420,7 @@ figure {
 .popover {
   position: absolute;
   top: calc(100% + 6px);
-  right: 0;
+  inset-inline-end: 0;
   z-index: 20;
   width: min(340px, calc(100vw - 32px));
   max-height: min(60vh, 520px);

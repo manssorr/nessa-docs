@@ -342,7 +342,7 @@ function DocumentView({ response, focusOnLoad }: { response: DocumentResponse; f
               <DocumentStatusLabel status={document.status} />
               {issues.length > 0 ? (
                 <button type="button" className="meta-warning" onClick={openProvenance} aria-controls={provenanceId}>
-                  {issues.length} {t("warning")}{issues.length === 1 ? '' : 's'}
+                  {issues.length} {t(issues.length === 1 ? "warning" : "warnings")}
                 </button>
               ) : null}
               {view === 'diagrams' && !summaryRepeatsTitle ? (
@@ -386,8 +386,8 @@ function DocumentView({ response, focusOnLoad }: { response: DocumentResponse; f
             <summary data-action="provenance">
               <span className="provenance-title">{t("Sources and provenance")}</span>
               <span className="provenance-count">
-                {sources.length}{t("source")}{sources.length === 1 ? '' : 's'}
-                {issues.length > 0 ? ` · ${issues.length} warning${issues.length === 1 ? '' : 's'}` : ''}
+                {sources.length} {t(sources.length === 1 ? "source" : "sources")}
+                {issues.length > 0 ? ` · ${issues.length} ${t(issues.length === 1 ? "warning" : "warnings")}` : ''}
               </span>
             </summary>
             <div className="provenance-body">

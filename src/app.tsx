@@ -157,7 +157,7 @@ function ProjectApp({ source, unselected, projectTitle = null }: { source: Proje
         {catalog ? (
           <Sidebar catalog={catalog} currentId={currentId} onNavigate={() => closeDrawer(false)} />
         ) : (
-          api === null ? null : <p className="sidebar-status">{catalogState.kind === 'failed' ? catalogState.message : 'Loading documents…'}</p>
+          api === null ? null : <p className="sidebar-status">{catalogState.kind === 'failed' ? catalogState.message : t("Loading documents…")}</p>
         )}
         <SidebarFooter current={route.kind === 'settings'} onNavigate={() => closeDrawer(false)} />
       </aside>
