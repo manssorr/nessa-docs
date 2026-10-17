@@ -453,7 +453,7 @@ figure {
 }
 .search .search-input {
   height: 30px;
-  padding-inline-start: 30px;
+  padding-inline: 30px;
   border-radius: var(--radius-row);
   border-color: transparent;
   background: var(--hover);
@@ -1902,7 +1902,7 @@ pre, code { text-align: left; }
 [dir='rtl'] .titlebar-controls svg,
 [dir='rtl'] .breadcrumb-separator,
 [dir='rtl'] .disclosure:not([aria-expanded='true']) svg { transform: scaleX(-1); }
-[dir='rtl'] .search-input { padding-inline-start: 30px; padding-inline-end: 10px; }
+
 @media (max-width: 899px) {
   [dir='rtl'] .sidebar:not([data-open='true']) { transform: translateX(calc(100% + 2 * var(--gutter))); }
 }
@@ -1926,3 +1926,11 @@ pre, code { text-align: left; }
 .chrome-tooltip { z-index: 100; max-width: min(280px, calc(100vw - 24px)); padding: 8px 10px; border: 1px solid var(--hairline); border-radius: 8px; background: var(--pane); color: var(--ink); font-size: 12px; line-height: 1.5; box-shadow: 0 4px 16px #0003; }
 .chrome-tooltip svg { fill: var(--pane); }
 @media (prefers-reduced-motion: reduce) { .settings-link { transition: none; } }
+
+/* A collapsed header reserves --app-bar-w for its toggle and brand. The
+ * title must not grow with the stored sidebar width over history controls. */
+.shell[data-sidebar='closed']:not([data-narrow]) .project-brand,
+.shell[data-narrow] .project-brand {
+  max-width: max(0px, calc(var(--app-bar-w) - 52px));
+}
+.inspector-relation { unicode-bidi: isolate; }

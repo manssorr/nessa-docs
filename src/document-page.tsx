@@ -1,4 +1,4 @@
-import { t } from './i18n';
+import { t, useLanguage } from './i18n';
 import { useDocsName } from './project-brand';
 // One document. The reading pane gives its width to the prose and diagrams;
 // provenance (file, sources, warnings) is a closed footer and the outline is
@@ -546,15 +546,16 @@ export function IssueList({ title, issues }: { title: string; issues: readonly C
 }
 
 function UnknownDocument({ response }: { response: UnknownDocumentResponse }) {
+  const language = useLanguage();
   const docsName = useDocsName();
   useEffect(() => {
-    window.document.title = `Document not found · ${docsName}`;
-  }, [docsName]);
+    window.document.title = `${t("Document not found")} · ${docsName}`;
+  }, [docsName, language]);
   return (
     <>
       <Titlebar current={t("Not found")} />
       <div className="page not-found" data-page-state="not-found">
-        <h1 tabIndex={-1}>No document “{response.id}”</h1>
+        <h1 tabIndex={-1}>{t("No document")} “<bdi>{response.id}</bdi>”</h1>
         {response.rejected.length > 0 ? (
           <>
             <p>{t("A file declares this ID, but it was rejected:")}</p>
@@ -564,7 +565,7 @@ function UnknownDocument({ response }: { response: UnknownDocumentResponse }) {
           <p>{t("No accepted document in docs/state has this ID. Nothing else is shown in its place.")}</p>
         )}
         <p>
-          <AppLink to="/">{t("Open the system overview")}</AppLink> or search from the sidebar.
+          <AppLink to="/">{t("Open the system overview")}</AppLink> {t("or search from the sidebar.")}
         </p>
       </div>
     </>

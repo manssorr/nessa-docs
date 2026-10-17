@@ -228,17 +228,18 @@ function Page(props: {
 }
 
 function NotFoundPage({ path }: { path: string }) {
+  const language = useLanguage();
   const docsName = useDocsName();
   useEffect(() => {
-    document.title = `Not found · ${docsName}`;
-  }, [docsName]);
+    document.title = `${t("Not found")} · ${docsName}`;
+  }, [docsName, language]);
   return (
     <>
       <Titlebar current={t("Not found")} />
       <div className="page not-found" data-page-state="not-found">
-        <h1 tabIndex={-1}>Nothing at {path}</h1>
+        <h1 tabIndex={-1}>{t("Nothing at")} <bdi dir="ltr">{path}</bdi></h1>
         <p>
-          Documents live at <code>/docs/&lt;id&gt;</code>. <AppLink to="/">{t("Open the system overview")}</AppLink>.
+          {t("Documents live at")} <code>/docs/&lt;id&gt;</code>. <AppLink to="/">{t("Open the system overview")}</AppLink>.
         </p>
       </div>
     </>

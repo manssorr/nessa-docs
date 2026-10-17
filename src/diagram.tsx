@@ -373,6 +373,7 @@ export function Diagram({
   const [fitScale, setFitScale] = useState(1);
   const [expanded, setExpanded] = useState(false);
   const host = useRef<HTMLDivElement>(null);
+  const labelUpdates = useRef<(() => void)[]>([]);
   const stage = useRef<HTMLDivElement>(null);
   const figure = useRef<HTMLElement>(null);
   const expandButton = useRef<HTMLButtonElement>(null);
@@ -432,6 +433,13 @@ export function Diagram({
     svg.style.maxWidth = 'none';
     const nodes = nodeElements(svg, state.renderId);
     const cleanups: (() => void)[] = [];
+    const updates: (() => void)[] = [];
+    const bindLabel = (element: Element, text: () => string) => {
+      const update = () => element.setAttribute('aria-label', text());
+      update();
+      updates.push(update);
+    };
+    labelUpdates.current = updates;
     // Click (a press that did not pan: the stage takes a pan's click), Enter or Space.
     const activate = (element: Element, action: () => void) => {
       const onClick = (event: Event) => {
@@ -475,12 +483,12 @@ export function Diagram({
           element.setAttribute('role', 'button');
           element.setAttribute('aria-haspopup', 'dialog');
           element.setAttribute('aria-expanded', 'false');
-          element.setAttribute('aria-label', `${t("Details:")} ${node}${target ? ` (${t("also opens")} ${target.title})` : ''}`);
+          bindLabel(element, () => `${t("Details:")} ${node}${target ? ` (${t("also opens")} ${target.title})` : ''}`);
           element.setAttribute('data-detail-key', String(entry.key));
           activate(element, () => selectDetail.current?.(entry.key, element));
         } else if (target) {
           element.setAttribute('role', 'link');
-          element.setAttribute('aria-label', `${t("Open")} ${target.title}`);
+          bindLabel(element, () => `${t("Open")} ${target.title}`);
           activate(element, () => navigate(documentPath(target.id)));
         }
       }
@@ -504,7 +512,7 @@ export function Diagram({
       edgeLabel.setAttribute('role', 'button');
       edgeLabel.setAttribute('aria-haspopup', 'dialog');
       edgeLabel.setAttribute('aria-expanded', 'false');
-      edgeLabel.setAttribute('aria-label', `${t("Details:")} ${t(ELEMENT_NAMES[entry.detail.family].edge).toLowerCase()} ${edge.from} ${t("to")} ${edge.to}, ${edge.label}`);
+      bindLabel(edgeLabel, () => `${t("Details:")} ${t(ELEMENT_NAMES[entry.detail.family].edge).toLowerCase()} ${edge.from} ${t("to")} ${edge.to}, ${edge.label}`);
       edgeLabel.setAttribute('data-detail-key', String(entry.key));
       addEdgeMark(edgeLabel, label);
       activate(edgeLabel, open);
@@ -549,9 +557,16 @@ export function Diagram({
     }
     return () => {
       cleanups.forEach((cleanup) => cleanup());
+      labelUpdates.current = [];
       container.innerHTML = '';
     };
-  }, [state, links, details, language]);
+  }, [state, links, details]);
+
+  // Translate accessible labels without replacing SVG nodes: selection and
+  // the inspector's focus-return element must keep their DOM identity.
+  useLayoutEffect(() => {
+    labelUpdates.current.forEach(update => update());
+  }, [language, state, links, details]);
 
   // The open detail is marked in place; selection never re-renders the SVG.
   useLayoutEffect(() => {

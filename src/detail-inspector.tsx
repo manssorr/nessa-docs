@@ -1,4 +1,4 @@
-import { t } from './i18n';
+import { t, useLanguage } from './i18n';
 // The details inspector: the authored section that explains a chart element.
 // On wide windows it is a quiet inset pane over the right of the reading pane
 // (non-modal; the page moves the chart so the element stays in view beside it);
@@ -74,6 +74,7 @@ export function DetailInspector({
   /** Where the open inspector sits on screen (null when closed), so the page can keep the element beside it. */
   onPlaced: (rect: DOMRect | null) => void;
 }) {
+  const language = useLanguage();
   const dialog = useRef<HTMLDialogElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const scroller = useRef<HTMLDivElement>(null);
@@ -103,6 +104,12 @@ export function DetailInspector({
     observer.observe(element);
     return () => observer.disconnect();
   }, [key, modal, onPlaced]);
+
+  // Direction can move a same-sized pane; ResizeObserver does not report
+  // position-only changes. Keep the chart reveal boundary current.
+  useLayoutEffect(() => {
+    if (key !== null && dialog.current?.open) onPlaced(dialog.current.getBoundingClientRect());
+  }, [language, key, onPlaced]);
 
   // Escape closes it when it is the top layer (src/layers.ts); turning into a dialog over an
   // expanded chart raises it above that chart.
@@ -173,8 +180,8 @@ export function DetailInspector({
             </IconButton>
             {target.kind === 'edge' ? (
               <p className="inspector-element" data-testid="inspector-element">
-                <code>{target.from}</code> → <code>{target.to}</code>
-                <span className="inspector-label">{target.label}</span>
+                <span className="inspector-relation" dir="ltr"><code>{target.from}</code> → <code>{target.to}</code></span>
+                <span className="inspector-label" dir="auto">{target.label}</span>
               </p>
             ) : (
               <p className="inspector-element" data-testid="inspector-element">
