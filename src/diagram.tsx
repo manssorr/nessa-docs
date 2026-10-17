@@ -546,12 +546,15 @@ export function Diagram({
     // An image's children are presentational, which would hide the controls
     // from assistive technology; a diagram with any is a labelled group.
     if (linkedCount + explainedCount > 0) {
-      const parts = [
-        linkedCount > 0 ? `${linkedCount} node${linkedCount === 1 ? '' : 's'} open other documents` : null,
-        explainedCount > 0 ? `${explainedCount} element${explainedCount === 1 ? '' : 's'} have details` : null,
-      ];
       svg.setAttribute('role', 'group');
-      svg.setAttribute('aria-label', `Diagram: ${parts.filter(Boolean).join('; ')}`);
+      bindLabel(svg, () => {
+        // Category labels avoid attaching English plural suffixes to Arabic.
+        const parts = [
+          linkedCount > 0 ? `${t("Linked document nodes")}: ${linkedCount.toLocaleString(document.documentElement.lang)}` : null,
+          explainedCount > 0 ? `${t("Elements with details")}: ${explainedCount.toLocaleString(document.documentElement.lang)}` : null,
+        ];
+        return `${t("Diagram:")} ${parts.filter(Boolean).join('; ')}`;
+      });
     } else {
       svg.setAttribute('role', 'img');
     }
@@ -809,8 +812,9 @@ export function Diagram({
         <div className="diagram-error" data-too-large="">
           <strong>{t("This chart is not drawn: it is too long.")}</strong>
           <p>
-            Its Mermaid source is {state.length.toLocaleString('en')} characters; charts up to {MERMAID_MAX_TEXT_SIZE.toLocaleString('en')} are
-            drawn.
+            {t('Its Mermaid source is {length} characters; charts up to {limit} are drawn.')
+              .replace('{length}', state.length.toLocaleString(language))
+              .replace('{limit}', MERMAID_MAX_TEXT_SIZE.toLocaleString(language))}
           </p>
         </div>
       ) : state.kind === 'outdated' ? (

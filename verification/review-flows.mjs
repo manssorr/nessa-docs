@@ -36,6 +36,9 @@ try {
       assert.equal(await page.locator('.detail-inspector').isVisible(), true);
       assert.equal(await node.evaluate(element => element === window.originalInvoker), true);
       assert.equal(await node.getAttribute('aria-expanded'), 'true');
+      const groupLabel = await page.locator('.diagram-svg svg[role="group"]').first().getAttribute('aria-label');
+      assert.ok(groupLabel.startsWith(language === 'ar' ? 'مخطط:' : 'Diagram:'));
+      assert.ok(groupLabel.includes(language === 'ar' ? 'عناصر لها تفاصيل' : 'Elements with details'));
       assert.ok((await node.getAttribute('aria-label')).startsWith(language === 'ar' ? 'التفاصيل:' : 'Details:'));
       assert.equal(await node.evaluate(element => element.hasAttribute('data-selected')), true);
       const bounds = await page.locator('.detail-inspector').boundingBox();
@@ -90,6 +93,9 @@ try {
     for (const width of [1440, 390]) {
       await page.setViewportSize({width, height: 1000});
       await check(`long brand leaves history targets clear: ${language}, ${width}`, async () => {
+        assert.equal(await page.locator('.project-brand .brand-name').textContent(),
+          'Architecture and behavior of the payment processing system');
+        assert.equal(await page.locator('.shell').getAttribute('data-sidebar'), 'closed');
         assert.equal(await page.locator('[data-history]').evaluateAll(buttons => buttons.every(button => {
           const rect = button.getBoundingClientRect();
           return button.contains(document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2));
@@ -117,6 +123,19 @@ try {
       assert.ok(padding.every(value => value >= 30));
     });
     if (output) await page.screenshot({path: `${output}/fixed-search-${language}.png`});
+  }
+  for (const language of ['ar', 'en']) {
+    await page.evaluate(language => localStorage.setItem('nessa-state-browser:language', language), language);
+    await page.goto(server.url + '/docs/edge-cases');
+    await page.locator('[data-too-large]').first().waitFor();
+    await check(`oversized diagram message and exact counts in ${language}`, async () => {
+      const message = await page.locator('[data-too-large] p').first().innerText();
+      assert.ok(message.includes((100001).toLocaleString(language)));
+      assert.ok(message.includes((100000).toLocaleString(language)));
+      assert.ok(message.includes(language === 'ar' ? 'الحد الأقصى' : 'characters; charts up to'));
+      if (language === 'ar') assert.ok(!message.includes('Its Mermaid source is'));
+    });
+    if (output && language === 'ar') await page.screenshot({path: `${output}/oversized-diagram-ar.png`});
   }
   await page.evaluate(() => localStorage.setItem('nessa-state-browser:language', 'ar'));
   for (const path of ['/missing-route', '/docs/not-present']) {

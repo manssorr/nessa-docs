@@ -162,5 +162,8 @@
   "warnings": "تحذيرات",
   "sources": "مصادر",
   "Appearance, language and document health": "المظهر واللغة وسلامة الوثائق",
-  "Document not found": "المستند غير موجود"
+  "Document not found": "المستند غير موجود",
+  "Linked document nodes": "عقد مرتبطة بوثائق",
+  "Elements with details": "عناصر لها تفاصيل",
+  "Its Mermaid source is {length} characters; charts up to {limit} are drawn.": "يتكون مصدر المخطط من {length} محرفًا؛ الحد الأقصى لرسم المخطط هو {limit} محرف."
 }
