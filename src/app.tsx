@@ -135,10 +135,11 @@ function ProjectApp({ source, unselected, projectTitle = null }: { source: Proje
   }, [pathname]);
 
   const catalog = catalogState.kind === 'loaded' ? catalogState.catalog : null;
+  const displayTitle = catalog?.documents.find(doc => doc.id === catalog.rootId)?.title ?? projectTitle;
   const currentId = route.kind === 'document' ? route.id : route.kind === 'home' ? (catalog?.rootId ?? null) : null;
 
   return (
-    <ProjectTitleContext.Provider value={null}><div
+    <ProjectTitleContext.Provider value={displayTitle}><div
       ref={shell}
       className="shell"
       data-sidebar={sidebarOpen ? 'open' : 'closed'}
