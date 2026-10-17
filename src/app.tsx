@@ -1,3 +1,5 @@
+import { Direction } from 'radix-ui';
+import { t, useLanguage } from './i18n';
 // Application chrome: loads the catalog, owns the sidebar (docked beside the
 // reading pane on wide windows, resizable there; a drawer on narrow ones), and
 // chooses the page for the current route.
@@ -33,9 +35,10 @@ export type CatalogState =
 const SIDEBAR_KEY = 'nessa-state-browser:sidebar';
 
 export function App({ source }: { source: ProjectSource }) {
+  const language = useLanguage();
   const search = useSearch();
   const id = new URLSearchParams(search).get('project');
-  return <ProjectSelection key={id ?? 'welcome'} id={id} source={source} />;
+  return <Direction.Provider dir={language === 'ar' ? 'rtl' : 'ltr'}><ProjectSelection key={id ?? 'welcome'} id={id} source={source} /></Direction.Provider>;
 }
 
 function ProjectSelection({ id, source }: { id: string | null; source: ProjectSource }) {
@@ -141,15 +144,13 @@ function ProjectApp({ source, unselected, projectTitle = null }: { source: Proje
       data-narrow={narrow ? '' : undefined}
       style={{ '--sidebar-w': `${sidebarWidth}px` } as CSSProperties}
     >
-      <a className="skip-link" href="#main">
-        Skip to content
-      </a>
+      <a className="skip-link" href="#main">{t("Skip to content")}</a>
       <AppBar ref={toggleRef} sidebarOpen={sidebarOpen} onToggleSidebar={toggleSidebar} onHome={() => closeDrawer(false)} />
       <aside
         id="sidebar"
         ref={sidebar}
         className="sidebar"
-        aria-label="Documents and search"
+        aria-label={t("Documents and search")}
         data-open={sidebarOpen}
         inert={!sidebarOpen ? true : undefined}
       >
@@ -165,28 +166,26 @@ function ProjectApp({ source, unselected, projectTitle = null }: { source: Proje
       <button
         type="button"
         className="scrim"
-        aria-label="Close sidebar"
+        aria-label={t("Close sidebar")}
         tabIndex={-1}
         onClick={() => closeDrawer(true)}
         hidden={!(narrow && drawerOpen)}
       />
       <main id="main" className="main" inert={narrow && drawerOpen ? true : undefined}>
-        {route.kind === 'settings' && api === null ? (<SettingsPage projectTitle={projectTitle} catalogState={unselected === null ? { kind: 'loading' } : { kind: 'failed', message: 'Open a project to read its documentation.', reloading: false }} onReload={reload} focusOnLoad={pathname !== firstPath.current} />) : api === null && unselected === null ? (<><Titlebar current="Loading" /><div className="page-status" aria-busy="true">Loading…</div></>) : route.kind === 'open-project' || api === null ? (<OpenProject source={source} initial={unselected ?? undefined} />) : route.kind === 'settings' ? (
+        {route.kind === 'settings' && api === null ? (<SettingsPage projectTitle={projectTitle} catalogState={unselected === null ? { kind: 'loading' } : { kind: 'failed', message: 'Open a project to read its documentation.', reloading: false }} onReload={reload} focusOnLoad={pathname !== firstPath.current} />) : api === null && unselected === null ? (<><Titlebar current={t("Loading")} /><div className="page-status" aria-busy="true">{t("Loading…")}</div></>) : route.kind === 'open-project' || api === null ? (<OpenProject source={source} initial={unselected ?? undefined} />) : route.kind === 'settings' ? (
           <SettingsPage projectTitle={catalog?.documents.find((doc) => doc.id === catalog.rootId)?.title ?? projectTitle} catalogState={catalogState} onReload={reload} focusOnLoad={pathname !== firstPath.current} />
         ) : catalogState.kind === 'failed' ? (
           <>
-            <Titlebar current="Unavailable" />
+            <Titlebar current={t("Unavailable")} />
             <div className="page-status" role="alert">
               <p>{catalogState.message}</p>
-              <QuietButton onClick={reload}>Try again</QuietButton>
+              <QuietButton onClick={reload}>{t("Try again")}</QuietButton>
             </div>
           </>
         ) : catalog === null ? (
           <>
-            <Titlebar current="Loading" />
-            <div className="page-status" aria-busy="true">
-              Loading documents…
-            </div>
+            <Titlebar current={t("Loading")} />
+            <div className="page-status" aria-busy="true">{t("Loading documents…")}</div>
           </>
         ) : (
           <Page route={route} catalog={catalog} onStaleCatalog={reload} focusOnLoad={pathname !== firstPath.current} />
@@ -209,11 +208,11 @@ function Page(props: {
         <DocumentPage id={catalog.rootId} catalogVersion={catalog.version} onStaleCatalog={onStaleCatalog} focusOnLoad={focusOnLoad} />
       ) : (
         <>
-          <Titlebar current="No system document" />
+          <Titlebar current={t("No system document")} />
           <div className="page not-found">
-            <h1>No system document</h1>
-            <p>docs/state/README.md was not accepted, so there is no overview to show.</p>
-            <IssueList title="Errors and warnings" issues={catalog.issues} />
+            <h1>{t("No system document")}</h1>
+            <p>{t("docs/state/README.md was not accepted, so there is no overview to show.")}</p>
+            <IssueList title={t("Errors and warnings")} issues={catalog.issues} />
           </div>
         </>
       );
@@ -232,11 +231,11 @@ function NotFoundPage({ path }: { path: string }) {
   }, []);
   return (
     <>
-      <Titlebar current="Not found" />
+      <Titlebar current={t("Not found")} />
       <div className="page not-found" data-page-state="not-found">
         <h1 tabIndex={-1}>Nothing at {path}</h1>
         <p>
-          Documents live at <code>/docs/&lt;id&gt;</code>. <AppLink to="/">Open the system overview</AppLink>.
+          Documents live at <code>/docs/&lt;id&gt;</code>. <AppLink to="/">{t("Open the system overview")}</AppLink>.
         </p>
       </div>
     </>

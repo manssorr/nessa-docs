@@ -1,3 +1,4 @@
+import { t } from './i18n';
 // The document tree and search, and the footer's way to Settings. The tree is
 // drawn from the catalog the app loaded; search asks the server and drops
 // answers to an older query.
@@ -28,7 +29,7 @@ export function Sidebar({ catalog, currentId, onNavigate }: SidebarProps) {
     <div className="sidebar-inner">
       <SearchBox query={query} onQuery={setQuery} onNavigate={onNavigate} />
       {query.trim() === '' ? (
-        <nav className="tree" aria-label="Documents">
+        <nav className="tree" aria-label={t("Documents")}>
           {root ? (
             <>
               <ul className="tree-level" data-level={0}>
@@ -36,13 +37,13 @@ export function Sidebar({ catalog, currentId, onNavigate }: SidebarProps) {
                   <Row document={root} current={root.id === currentId} depth={0} onNavigate={onNavigate} icon={<Network />} />
                 </li>
               </ul>
-              <Section title={KIND_NAME.service}>
+              <Section title={t(KIND_NAME.service)}>
                 {structural.map((document) => (
                   <TreeNode key={document.id} document={document} byId={byId} currentId={currentId} onNavigate={onNavigate} depth={0} />
                 ))}
               </Section>
               {guides.length > 0 ? (
-                <Section title={KIND_NAME.guide}>
+                <Section title={t(KIND_NAME.guide)}>
                   {guides.map((document) => (
                     <TreeNode key={document.id} document={document} byId={byId} currentId={currentId} onNavigate={onNavigate} depth={0} />
                   ))}
@@ -50,7 +51,7 @@ export function Sidebar({ catalog, currentId, onNavigate }: SidebarProps) {
               ) : null}
             </>
           ) : (
-            <p className="tree-empty">No system document was accepted. See Settings › Health.</p>
+            <p className="tree-empty">{t("No system document was accepted. See Settings › Health.")}</p>
           )}
         </nav>
       ) : null}
@@ -70,7 +71,7 @@ export function SidebarFooter({ current, onNavigate }: { current: boolean; onNav
         <span className="row-icon" aria-hidden="true">
           <Settings />
         </span>
-        <span className="row-label">Settings</span>
+        <span className="row-label" dir="auto">{t("Settings")}</span>
       </AppLink>
     </div>
   );
@@ -107,7 +108,7 @@ function Row(props: {
 }) {
   const { document, current, depth, onNavigate, icon, disclosure } = props;
   return (
-    <div className="tree-row" data-current={current ? '' : undefined} style={{ paddingLeft: `${depth * 14}px` }}>
+    <div className="tree-row" data-current={current ? '' : undefined} style={{ paddingInlineStart: `${depth * 14}px` }}>
       {disclosure ?? <span className="disclosure-spacer" aria-hidden="true" />}
       <AppLink
         to={documentPath(document.id)}
@@ -122,7 +123,7 @@ function Row(props: {
             {icon}
           </span>
         ) : null}
-        <span className="row-label">{document.title}</span>
+        <span className="row-label" dir="auto">{document.title}</span>
       </AppLink>
     </div>
   );
@@ -157,7 +158,7 @@ function TreeNode(props: {
               className="disclosure"
               aria-expanded={open}
               aria-controls={groupId}
-              aria-label={`${open ? 'Collapse' : 'Expand'} ${document.title}`}
+              aria-label={`${t(open ? 'Collapse' : 'Expand')} ${document.title}`}
               onClick={() => setOpen((value) => !value)}
             >
               <ChevronRight aria-hidden="true" />
@@ -212,16 +213,15 @@ function SearchBox({ query, onQuery, onNavigate }: { query: string; onQuery: (q:
 
   return (
     <div className="search" role="search">
-      <label htmlFor="doc-search" className="visually-hidden">
-        Search documents
-      </label>
+      <label htmlFor="doc-search" className="visually-hidden">{t("Search documents")}</label>
       <span className="search-icon" aria-hidden="true">
         <Search />
       </span>
       <Input
         id="doc-search"
         type="search"
-        placeholder="Search"
+        dir="auto"
+        placeholder={t("Search")}
         autoComplete="off"
         value={query}
         maxLength={200}
@@ -236,13 +236,13 @@ function SearchBox({ query, onQuery, onNavigate }: { query: string; onQuery: (q:
       />
       {query.trim() !== '' ? (
         <div className="search-results" aria-live="polite">
-          {state.kind === 'searching' ? <p className="search-status">Searching…</p> : null}
+          {state.kind === 'searching' ? <p className="search-status">{t("Searching…")}</p> : null}
           {state.kind === 'failed' ? <p className="search-status">{state.message}</p> : null}
           {state.kind === 'done' && state.results.length === 0 ? (
-            <p className="search-status">No loaded document matches “{state.query}”.</p>
+            <p className="search-status">{t("No loaded document matches")} “<bdi>{state.query}</bdi>”.</p>
           ) : null}
           {state.kind === 'done' && state.results.length > 0 ? (
-            <ul aria-label={`${state.results.length} results`}>
+            <ul aria-label={`${state.results.length} ${t("results")}`}>
               {state.results.map((result) => (
                 <li key={result.id}>
                   <AppLink
@@ -254,8 +254,8 @@ function SearchBox({ query, onQuery, onNavigate }: { query: string; onQuery: (q:
                       onNavigate();
                     }}
                   >
-                    <span className="search-title">{result.title}</span>
-                    <span className="search-snippet">{result.snippet}</span>
+                    <span dir="auto" className="search-title">{result.title}</span>
+                    <span dir="auto" className="search-snippet">{result.snippet}</span>
                   </AppLink>
                 </li>
               ))}

@@ -1,3 +1,4 @@
+import { t } from './i18n';
 // The details inspector: the authored section that explains a chart element.
 // On wide windows it is a quiet inset pane over the right of the reading pane
 // (non-modal; the page moves the chart so the element stays in view beside it);
@@ -163,11 +164,11 @@ export function DetailInspector({
       {selection && section && target ? (
         <div className="inspector-frame" data-detail-key={selection.key}>
           <header className="inspector-head">
-            <p className="inspector-kind">{ELEMENT_NAMES[selection.detail.family][target.kind]}</p>
+            <p className="inspector-kind">{t(ELEMENT_NAMES[selection.detail.family][target.kind])}</p>
             <h2 id={titleId} ref={heading} tabIndex={-1} className="inspector-title">
               {section.title}
             </h2>
-            <IconButton label="Close details" onClick={onClose} data-action="close-details" className="inspector-close">
+            <IconButton label={t("Close details")} onClick={onClose} data-action="close-details" className="inspector-close">
               <X />
             </IconButton>
             {target.kind === 'edge' ? (
@@ -181,8 +182,7 @@ export function DetailInspector({
               </p>
             )}
             {linked ? (
-              <AppLink to={documentPath(linked.id)} className="inspector-open" data-action="open-linked-document">
-                Open {linked.title}
+              <AppLink to={documentPath(linked.id)} className="inspector-open" data-action="open-linked-document">{t("Open")} <bdi>{linked.title}</bdi>
               </AppLink>
             ) : null}
           </header>
@@ -194,9 +194,7 @@ export function DetailInspector({
               className="prose inspector-prose"
               diagram={(index) => (
                 <p className="inspector-chart">
-                  <AppLink to={detailsHref(chartAnchor(chartsBefore + index))} data-action="inspector-chart" data-diagram-index={chartsBefore + index}>
-                    Open chart {chartsBefore + index + 1} in Details
-                  </AppLink>
+                  <AppLink to={detailsHref(chartAnchor(chartsBefore + index))} data-action="inspector-chart" data-diagram-index={chartsBefore + index}>{t("Open chart")} {chartsBefore + index + 1} {t("in Details")}</AppLink>
                 </p>
               )}
             />
@@ -209,13 +207,9 @@ export function DetailInspector({
                 }}
                 data-action="show-full"
                 className="inspector-more"
-              >
-                Show full explanation
-              </QuietButton>
+              >{t("Show full explanation")}</QuietButton>
             ) : null}
-            <AppLink to={detailsHref(slug)} className="inspector-section-link" data-action="inspector-section">
-              Show this section in Details
-            </AppLink>
+            <AppLink to={detailsHref(slug)} className="inspector-section-link" data-action="inspector-section">{t("Show this section in Details")}</AppLink>
           </div>
         </div>
       ) : null}
