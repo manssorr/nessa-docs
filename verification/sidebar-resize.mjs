@@ -227,7 +227,7 @@ export async function runSidebarResize(engine) {
       c.check(`${where}: right-button press and move does nothing (R2)`, (await width()) === 300 && !(await layout(page)).resizing);
 
       // R7, R8: keyboard. Focus the separator by Tab from the sidebar's last control.
-      await page.locator(S.settingsLink).focus();
+      await page.locator('.language-switch').focus();
       await page.keyboard.press(engine === 'webkit' ? 'Alt+Tab' : 'Tab');
       const focused = await page.evaluate(() => document.activeElement?.hasAttribute('data-sidebar-resizer'));
       c.check(`${where}: Tab from the sidebar footer reaches the separator`, focused);
@@ -459,7 +459,7 @@ export async function runSidebarResize(engine) {
       await page.mouse.move(x, r.y + 60);
       await page.mouse.move(640, 400, { steps: 3 });
       await page.evaluate(() => document.activeElement?.blur());
-      await page.locator(S.settingsLink).focus();
+      await page.locator('.language-switch').focus();
       await page.keyboard.press(engine === 'webkit' ? 'Alt+Tab' : 'Tab');
       await settle();
       facts.focus = await light(page);

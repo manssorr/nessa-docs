@@ -1,3 +1,4 @@
+import { t, useLanguage } from './i18n';
 // The details inspector: the authored section that explains a chart element.
 // On wide windows it is a quiet inset pane over the right of the reading pane
 // (non-modal; the page moves the chart so the element stays in view beside it);
@@ -73,6 +74,7 @@ export function DetailInspector({
   /** Where the open inspector sits on screen (null when closed), so the page can keep the element beside it. */
   onPlaced: (rect: DOMRect | null) => void;
 }) {
+  const language = useLanguage();
   const dialog = useRef<HTMLDialogElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const scroller = useRef<HTMLDivElement>(null);
@@ -102,6 +104,12 @@ export function DetailInspector({
     observer.observe(element);
     return () => observer.disconnect();
   }, [key, modal, onPlaced]);
+
+  // Direction can move a same-sized pane; ResizeObserver does not report
+  // position-only changes. Keep the chart reveal boundary current.
+  useLayoutEffect(() => {
+    if (key !== null && dialog.current?.open) onPlaced(dialog.current.getBoundingClientRect());
+  }, [language, key, onPlaced]);
 
   // Escape closes it when it is the top layer (src/layers.ts); turning into a dialog over an
   // expanded chart raises it above that chart.
@@ -163,8 +171,8 @@ export function DetailInspector({
       {selection && section && target ? (
         <div className="inspector-frame" data-detail-key={selection.key}>
           <InspectorHeader titleId={titleId} headingRef={heading} title={section.title}
-            elementName={ELEMENT_NAMES[selection.detail.family][target.kind]} target={target}
-            linked={linked} onClose={onClose} />
+            elementName={t(ELEMENT_NAMES[selection.detail.family][target.kind])} target={target}
+            linked={linked} onClose={onClose} closeLabel={t("Close details")} openLabel={t("Open")} />
           <div ref={scroller} className="inspector-body" tabIndex={-1} data-shown={showFull ? 'full' : 'overview'}>
             <MarkdownBody
               tokens={shown}
@@ -173,9 +181,7 @@ export function DetailInspector({
               className="prose inspector-prose"
               diagram={(index) => (
                 <p className="inspector-chart">
-                  <AppLink to={detailsHref(chartAnchor(chartsBefore + index))} data-action="inspector-chart" data-diagram-index={chartsBefore + index}>
-                    Open chart {chartsBefore + index + 1} in Details
-                  </AppLink>
+                  <AppLink to={detailsHref(chartAnchor(chartsBefore + index))} data-action="inspector-chart" data-diagram-index={chartsBefore + index}>{t("Open chart")} {chartsBefore + index + 1} {t("in Details")}</AppLink>
                 </p>
               )}
             />
@@ -188,13 +194,9 @@ export function DetailInspector({
                 }}
                 data-action="show-full"
                 className="inspector-more"
-              >
-                Show full explanation
-              </QuietButton>
+              >{t("Show full explanation")}</QuietButton>
             ) : null}
-            <AppLink to={detailsHref(slug)} className="inspector-section-link" data-action="inspector-section">
-              Show this section in Details
-            </AppLink>
+            <AppLink to={detailsHref(slug)} className="inspector-section-link" data-action="inspector-section">{t("Show this section in Details")}</AppLink>
           </div>
         </div>
       ) : null}
