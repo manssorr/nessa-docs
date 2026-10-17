@@ -16,6 +16,7 @@ try {
     for (const width of [1440, 390]) {
      for (const authored of ['en', 'ar']) {
       const context = await browser.newContext({locale: language, viewport: {width, height: 1000}, reducedMotion: 'reduce'});
+      try {
       const page = await context.newPage();
       const errors = [];
       page.on('pageerror', error => errors.push(String(error)));
@@ -83,9 +84,19 @@ try {
         failures.push(`${authored}-${language}-${width}`);console.error(`FAIL ${authored}-${language}-${width}: ${error.message}`);
       }
       if (output) await page.screenshot({path:`${output}/inspector-header-${authored}-${language}-${width}.png`});
-      await page.locator('[data-action="close-details"]').click();
-      assert.equal(await edge.evaluate(e=>e===document.activeElement),true);
-      await context.close();
+      try {
+        await page.locator('[data-action="close-details"]').click();
+        assert.equal(await edge.evaluate(e=>e===document.activeElement),true);
+      } catch (error) {
+        failures.push(`focus-${authored}-${language}-${width}`);
+        console.error(`FAIL focus-${authored}-${language}-${width}: ${error.message}`);
+      }
+      } catch (error) {
+        failures.push(`case-${authored}-${language}-${width}`);
+        console.error(`FAIL case-${authored}-${language}-${width}: ${error.message}`);
+      } finally {
+        await context.close();
+      }
      }
     }
   }
