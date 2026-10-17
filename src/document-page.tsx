@@ -7,7 +7,7 @@
 
 import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { Token, Tokens } from 'marked';
-import { ChevronRight, ListTree } from 'lucide-react';
+import { Check, ChevronDown, ChevronRight, ListTree } from 'lucide-react';
 import type { CatalogIssue, DocumentResponse, DocumentSummary, LinkTarget, UnknownDocumentResponse } from '../shared/api';
 import { useProjectReads } from './project-opening/project-context';
 import { groupByKind, KIND_NAME, KIND_SINGULAR } from './kinds';
@@ -20,7 +20,7 @@ import { collectDiagrams, collectHeadings, type Heading, MarkdownBody, TargetLin
 import { AppLink, documentPath, navigate, scrollToHash, useSearchAndHash } from './router';
 import { Titlebar } from './shell';
 import { plainText } from '../shared/markdown';
-import { DocumentStatusLabel, IconButton, QuietButton, SegmentedControl, SegmentedControlOption } from './ui';
+import { Button, DocumentStatusLabel, IconButton, QuietButton, SegmentedControl, SegmentedControlOption } from './ui';
 import { useEscapeLayer } from './layers';
 import { useNarrow } from './viewport';
 
@@ -455,6 +455,8 @@ function DocumentView({ response, focusOnLoad }: { response: DocumentResponse; f
 function OutlineMenu({ headings, hrefFor }: { headings: readonly Heading[]; hrefFor: (slug: string) => string }) {
   const [open, setOpen] = useState(false);
   const menuId = useId();
+  const location = useSearchAndHash();
+  const selected = location.split("#")[1] ?? "";
   const button = useRef<HTMLButtonElement>(null);
   const list = useRef<HTMLDivElement>(null);
   useEscapeLayer(open, () => {
@@ -472,27 +474,32 @@ function OutlineMenu({ headings, hrefFor }: { headings: readonly Heading[]; href
   }, [open]);
   return (
     <div className="outline-menu">
-      <IconButton ref={button} label="On this page" aria-expanded={open} aria-controls={menuId} onClick={() => setOpen((v) => !v)} data-action="outline">
-        <ListTree />
-      </IconButton>
+      <Button variant="ghost" size="sm" className="outline-trigger" ref={button} aria-label="On this page" aria-expanded={open} aria-controls={menuId} onClick={() => setOpen((v) => !v)} data-action="outline">
+        <ListTree aria-hidden="true" /><span>On this page</span><ChevronDown aria-hidden="true" />
+      </Button>
       {open ? (
         <div ref={list} id={menuId} className="popover outline" role="navigation" aria-label="On this page">
+          <div className="outline-heading"><ListTree aria-hidden="true" /><span>On this page</span><span className="outline-count">{headings.length}</span></div>
           <ul>
-            {headings.map((heading) => (
+            {headings.map((heading, index) => (
               <li key={heading.slug} data-depth={heading.depth}>
                 <a
                   href={hrefFor(heading.slug)}
+                  aria-current={selected === encodeURIComponent(heading.slug) ? "location" : undefined}
                   onClick={(event) => {
                     event.preventDefault();
                     setOpen(false);
                     navigate(hrefFor(heading.slug));
                   }}
                 >
-                  {heading.text}
+                  <span className="outline-number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+                  <span dir="auto" className="outline-label">{heading.text}</span>
+                  {selected === encodeURIComponent(heading.slug) ? <Check aria-hidden="true" /> : null}
                 </a>
               </li>
             ))}
           </ul>
+          <div className="outline-hint">Jump to section · Esc to close</div>
         </div>
       ) : null}
     </div>
