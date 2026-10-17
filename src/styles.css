@@ -949,7 +949,8 @@ figure {
 }
 .prose ul,
 .prose ol {
-  padding-inline-start: 22px;
+  /* Authored items can use either direction within one list. */
+  padding-inline: 22px;
 }
 .prose li + li {
   margin-top: 4px;
@@ -1841,6 +1842,11 @@ figure {
 .child-row:focus-visible .child-chevron {
   color: var(--ink);
   transform: translateX(2px);
+}
+.child-chevron:dir(rtl) { transform: scaleX(-1); }
+.child-row:hover .child-chevron:dir(rtl),
+.child-row:focus-visible .child-chevron:dir(rtl) {
+  transform: translateX(-2px) scaleX(-1);
 }
 @media (max-width: 599px) {
   .child-row {
