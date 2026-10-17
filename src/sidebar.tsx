@@ -1,15 +1,16 @@
-import { t } from './i18n';
+import { t, useLanguage, setLanguage } from './i18n';
+import { Tooltip } from 'radix-ui';
 // The document tree and search, and the footer's way to Settings. The tree is
 // drawn from the catalog the app loaded; search asks the server and drops
 // answers to an older query.
 
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
-import { ChevronRight, Network, Search, Settings } from 'lucide-react';
+import { ChevronRight, Network, Search, Settings, Languages } from 'lucide-react';
 import type { CatalogResponse, DocumentSummary, SearchResult } from '../shared/api';
 import { useProjectReads } from './project-opening/project-context';
 import { byKind, KIND_NAME } from './kinds';
 import { AppLink, documentPath, settingsPath } from './router';
-import { Input } from './ui';
+import { Input, QuietButton } from './ui';
 
 interface SidebarProps {
   catalog: CatalogResponse;
@@ -65,14 +66,20 @@ export function Sidebar({ catalog, currentId, onNavigate }: SidebarProps) {
  * catalog does not (verification/settings.mjs opens it in each state).
  */
 export function SidebarFooter({ current, onNavigate }: { current: boolean; onNavigate: () => void }) {
+  const language = useLanguage();
   return (
     <div className="sidebar-footer">
-      <AppLink to={settingsPath()} onClick={onNavigate} className="row settings-link" aria-current={current ? 'page' : undefined}>
-        <span className="row-icon" aria-hidden="true">
-          <Settings />
-        </span>
-        <span className="row-label" dir="auto">{t("Settings")}</span>
-      </AppLink>
+      <Tooltip.Provider delayDuration={200}><Tooltip.Root><Tooltip.Trigger asChild>
+        <AppLink to={settingsPath()} onClick={onNavigate} className="row settings-link" aria-current={current ? 'page' : undefined}>
+          <span className="row-icon" aria-hidden="true"><Settings /></span>
+          <span className="row-label" dir="auto">{t("Settings")}</span>
+        </AppLink>
+      </Tooltip.Trigger><Tooltip.Portal><Tooltip.Content className="chrome-tooltip" side="top" sideOffset={8} collisionPadding={12}>
+        {t('Appearance, language and document health')}<Tooltip.Arrow />
+      </Tooltip.Content></Tooltip.Portal></Tooltip.Root></Tooltip.Provider>
+      <QuietButton className="language-switch" onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')} aria-label={language === 'ar' ? 'Switch to English' : 'التبديل إلى العربية'}>
+        <Languages aria-hidden="true" /><span lang={language === 'ar' ? 'en' : 'ar'} dir={language === 'ar' ? 'ltr' : 'rtl'}>{language === 'ar' ? 'English' : 'العربية'}</span>
+      </QuietButton>
     </div>
   );
 }

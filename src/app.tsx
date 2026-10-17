@@ -1,3 +1,4 @@
+import { DocsNameContext, projectDocsName, useDocsName } from './project-brand';
 import { Direction } from 'radix-ui';
 import { t, useLanguage } from './i18n';
 // Application chrome: loads the catalog, owns the sidebar (docked beside the
@@ -134,10 +135,11 @@ function ProjectApp({ source, unselected, projectTitle = null }: { source: Proje
   }, [pathname]);
 
   const catalog = catalogState.kind === 'loaded' ? catalogState.catalog : null;
+  const displayTitle = catalog?.documents.find(doc => doc.id === catalog.rootId)?.title ?? projectTitle;
   const currentId = route.kind === 'document' ? route.id : route.kind === 'home' ? (catalog?.rootId ?? null) : null;
 
   return (
-    <div
+    <DocsNameContext.Provider value={projectDocsName(displayTitle)}><div
       ref={shell}
       className="shell"
       data-sidebar={sidebarOpen ? 'open' : 'closed'}
@@ -145,7 +147,7 @@ function ProjectApp({ source, unselected, projectTitle = null }: { source: Proje
       style={{ '--sidebar-w': `${sidebarWidth}px` } as CSSProperties}
     >
       <a className="skip-link" href="#main">{t("Skip to content")}</a>
-      <AppBar ref={toggleRef} sidebarOpen={sidebarOpen} onToggleSidebar={toggleSidebar} onHome={() => closeDrawer(false)} />
+      <AppBar projectTitle={displayTitle} ref={toggleRef} sidebarOpen={sidebarOpen} onToggleSidebar={toggleSidebar} onHome={() => closeDrawer(false)} />
       <aside
         id="sidebar"
         ref={sidebar}
@@ -191,7 +193,7 @@ function ProjectApp({ source, unselected, projectTitle = null }: { source: Proje
           <Page route={route} catalog={catalog} onStaleCatalog={reload} focusOnLoad={pathname !== firstPath.current} />
         )}
       </main>
-    </div>
+    </div></DocsNameContext.Provider>
   );
 }
 
@@ -226,9 +228,10 @@ function Page(props: {
 }
 
 function NotFoundPage({ path }: { path: string }) {
+  const docsName = useDocsName();
   useEffect(() => {
-    document.title = 'Not found · Nessa Docs';
-  }, []);
+    document.title = `Not found · ${docsName}`;
+  }, [docsName]);
   return (
     <>
       <Titlebar current={t("Not found")} />

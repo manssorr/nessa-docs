@@ -1912,3 +1912,17 @@ pre, code { text-align: left; }
     right: calc(var(--sidebar-w) + 2 * var(--gutter) + 10px);
   }
 }
+
+/* Project identity and always-available sidebar language access. */
+.project-brand { min-width: 0; max-width: calc(var(--sidebar-w) - 64px); flex-direction: column; align-items: flex-start; gap: 2px; font-size: 13px; line-height: 1.2; letter-spacing: 0; }
+.project-brand .brand-name { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.project-brand .brand-product { font-size: 11px; }
+.sidebar-footer { gap: 6px; }
+.settings-link { min-width: 0; border: 1px solid transparent; transition: background-color 140ms, border-color 140ms; }
+.settings-link:hover, .settings-link:focus-visible { background: var(--hover); border-color: var(--hairline); }
+.settings-link:hover .row-icon, .settings-link:focus-visible .row-icon { color: var(--ink); }
+.language-switch { flex: none; gap: 5px; }
+.language-switch svg { width: 15px; height: 15px; }
+.chrome-tooltip { z-index: 100; max-width: min(280px, calc(100vw - 24px)); padding: 8px 10px; border: 1px solid var(--hairline); border-radius: 8px; background: var(--pane); color: var(--ink); font-size: 12px; line-height: 1.5; box-shadow: 0 4px 16px #0003; }
+.chrome-tooltip svg { fill: var(--pane); }
+@media (prefers-reduced-motion: reduce) { .settings-link { transition: none; } }

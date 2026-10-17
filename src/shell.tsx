@@ -16,8 +16,8 @@ import { IconButton } from './ui';
  */
 export const AppBar = forwardRef<
   HTMLButtonElement,
-  { sidebarOpen: boolean; onToggleSidebar: () => void; onHome: () => void }
->(function AppBar({ sidebarOpen, onToggleSidebar, onHome }, toggleRef) {
+  { projectTitle?: string | null; sidebarOpen: boolean; onToggleSidebar: () => void; onHome: () => void }
+>(function AppBar({ projectTitle, sidebarOpen, onToggleSidebar, onHome }, toggleRef) {
   return (
     <div className="app-bar">
       <IconButton
@@ -30,8 +30,8 @@ export const AppBar = forwardRef<
       >
         <PanelLeft />
       </IconButton>
-      <AppLink to="/" className="brand" aria-label="Nessa Docs" title={t("System overview")} onClick={onHome}>
-        <span className="brand-name">nessa</span>
+      <AppLink to="/" className={`brand ${projectTitle ? 'project-brand' : ''}`} aria-label={projectTitle ? `${projectTitle} Docs` : 'Nessa Docs'} title={t("System overview")} onClick={onHome}>
+        <span className="brand-name" dir="auto">{projectTitle || 'nessa'}</span>
         <span className="brand-product">Docs</span>
       </AppLink>
     </div>

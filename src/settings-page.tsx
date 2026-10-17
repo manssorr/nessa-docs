@@ -1,3 +1,4 @@
+import { useDocsName } from './project-brand';
 import { t, useLanguage, setLanguage } from './i18n';
 // Settings: General (appearance, diagram detail) and Health (what the loader accepted and
 // rejected, and reading docs/state again). The tab is in the URL
@@ -27,13 +28,14 @@ export function SettingsPage({
   focusOnLoad: boolean;
   projectTitle: string | null;
 }) {
+  const docsName = useDocsName();
   const language = useLanguage();
   const tab = parseSettingsTab(useSearch());
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
-    document.title = `${t('Settings')} · Nessa Docs`;
+    document.title = `${t('Settings')} · ${docsName}`;
     if (focusOnLoad) heading.current?.focus({ preventScroll: true });
-  }, [focusOnLoad, language]);
+  }, [focusOnLoad, language, docsName]);
   return (
     <>
       <Titlebar current={t("Settings")} />
