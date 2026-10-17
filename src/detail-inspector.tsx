@@ -172,19 +172,19 @@ export function DetailInspector({
         <div className="inspector-frame" data-detail-key={selection.key}>
           <header className="inspector-head">
             <p className="inspector-kind">{t(ELEMENT_NAMES[selection.detail.family][target.kind])}</p>
-            <h2 id={titleId} ref={heading} tabIndex={-1} className="inspector-title">
+            <h2 id={titleId} ref={heading} tabIndex={-1} className="inspector-title" dir="auto">
               {section.title}
             </h2>
             <IconButton label={t("Close details")} onClick={onClose} data-action="close-details" className="inspector-close">
               <X />
             </IconButton>
             {target.kind === 'edge' ? (
-              <p className="inspector-element" data-testid="inspector-element">
+              <p className="inspector-element" dir="auto" data-testid="inspector-element">
                 <span className="inspector-relation" dir="ltr"><code>{target.from}</code> → <code>{target.to}</code></span>
                 <span className="inspector-label" dir="auto">{target.label}</span>
               </p>
             ) : (
-              <p className="inspector-element" data-testid="inspector-element">
+              <p className="inspector-element" dir="auto" data-testid="inspector-element">
                 <code>{target.node}</code>
               </p>
             )}
