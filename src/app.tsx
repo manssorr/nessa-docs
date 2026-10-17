@@ -1,3 +1,4 @@
+import { ProjectTitleContext, useDocsName } from './project-brand';
 // Application chrome: loads the catalog, owns the sidebar (docked beside the
 // reading pane on wide windows, resizable there; a drawer on narrow ones), and
 // chooses the page for the current route.
@@ -134,7 +135,7 @@ function ProjectApp({ source, unselected, projectTitle = null }: { source: Proje
   const currentId = route.kind === 'document' ? route.id : route.kind === 'home' ? (catalog?.rootId ?? null) : null;
 
   return (
-    <div
+    <ProjectTitleContext.Provider value={null}><div
       ref={shell}
       className="shell"
       data-sidebar={sidebarOpen ? 'open' : 'closed'}
@@ -192,7 +193,7 @@ function ProjectApp({ source, unselected, projectTitle = null }: { source: Proje
           <Page route={route} catalog={catalog} onStaleCatalog={reload} focusOnLoad={pathname !== firstPath.current} />
         )}
       </main>
-    </div>
+    </div></ProjectTitleContext.Provider>
   );
 }
 
@@ -227,9 +228,10 @@ function Page(props: {
 }
 
 function NotFoundPage({ path }: { path: string }) {
+  const docsName = useDocsName();
   useEffect(() => {
-    document.title = 'Not found · Nessa Docs';
-  }, []);
+    document.title = `Not found · ${docsName}`;
+  }, [docsName]);
   return (
     <>
       <Titlebar current="Not found" />
