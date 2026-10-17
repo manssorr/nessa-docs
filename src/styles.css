@@ -1348,7 +1348,8 @@ figure {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
-  line-height: 1.35;
+  line-height: 24px;
+  padding-block: 2px;
 }
 /* The title is where focus lands on opening (tabindex -1), not a control: no ring. */
 .inspector-title:focus {

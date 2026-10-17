@@ -51,7 +51,11 @@ try {
         const body = element.querySelector('.inspector-body');
         const box = body.getBoundingClientRect(), style = getComputedStyle(body);
         const close = element.querySelector('.inspector-close'), c = close.getBoundingClientRect();
-        return {title:rect('.inspector-title'), relation:rect('.inspector-relation'), label:rect('.inspector-label'), badge:rect('.inspector-kind'),
+        const range = document.createRange();
+        range.selectNodeContents(element.querySelector('.inspector-title'));
+        const firstLine = range.getClientRects()[0];
+        const icon = close.querySelector('svg').getBoundingClientRect();
+        return {titleTextCenter:(firstLine.top+firstLine.bottom)/2, closeIconCenter:(icon.top+icon.bottom)/2, title:rect('.inspector-title'), relation:rect('.inspector-relation'), label:rect('.inspector-label'), badge:rect('.inspector-kind'),
           bodyLeft:box.left+parseFloat(style.paddingLeft), bodyRight:box.right-parseFloat(style.paddingRight),
           close:rect('.inspector-close'), closeReachable:close.contains(document.elementFromPoint(c.x+c.width/2,c.y+c.height/2)),
           pageOverflow:document.documentElement.scrollWidth-innerWidth};
@@ -61,6 +65,7 @@ try {
         assert.ok(Math.abs(Math.max(facts.title.right,facts.close.right)-facts.bodyRight)<2);
         assert.ok(facts.title.right<=facts.close.x || facts.close.right<=facts.title.x);
         assert.ok(Math.abs(facts.title.y-facts.close.y)<2);
+        assert.ok(Math.abs(facts.titleTextCenter-facts.closeIconCenter)<1.5, `First title line and close icon differ by ${Math.abs(facts.titleTextCenter-facts.closeIconCenter)}px`);
         assert.ok(Math.abs((facts.badge.y+facts.badge.bottom)/2-(facts.relation.y+facts.relation.bottom)/2)<2);
         assert.ok(Math.abs(facts.badge.right-facts.bodyRight)<2);
         assert.ok(parseFloat(facts.badge.radius)>100);
