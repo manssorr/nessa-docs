@@ -160,7 +160,7 @@ function ProjectApp({ source, unselected, projectTitle = null }: { source: Proje
         ) : (
           api === null ? null : <p className="sidebar-status">{catalogState.kind === 'failed' ? catalogState.message : t("Loading documents…")}</p>
         )}
-        <SidebarFooter current={route.kind === 'settings'} onNavigate={() => closeDrawer(false)} />
+        <SidebarFooter onEscape={narrow && drawerOpen ? () => closeDrawer(true) : undefined} current={route.kind === 'settings'} onNavigate={() => closeDrawer(false)} />
       </aside>
       {/* R10: no separator while the sidebar is hidden or a drawer. */}
       {!narrow && docked ? <SidebarResizer shell={shell} width={sidebarWidth} onCommit={commitSidebarWidth} /> : null}

@@ -65,7 +65,7 @@ export function Sidebar({ catalog, currentId, onNavigate }: SidebarProps) {
  * through it Health and Reload documentation — stays reachable when the
  * catalog does not (verification/settings.mjs opens it in each state).
  */
-export function SidebarFooter({ current, onNavigate }: { current: boolean; onNavigate: () => void }) {
+export function SidebarFooter({ current, onNavigate, onEscape }: { current: boolean; onNavigate: () => void; onEscape?: () => void }) {
   const language = useLanguage();
   return (
     <div className="sidebar-footer">
@@ -74,7 +74,7 @@ export function SidebarFooter({ current, onNavigate }: { current: boolean; onNav
           <span className="row-icon" aria-hidden="true"><Settings /></span>
           <span className="row-label" dir="auto">{t("Settings")}</span>
         </AppLink>
-      </Tooltip.Trigger><Tooltip.Portal><Tooltip.Content className="chrome-tooltip" side="top" sideOffset={8} collisionPadding={12}>
+      </Tooltip.Trigger><Tooltip.Portal><Tooltip.Content onEscapeKeyDown={onEscape} className="chrome-tooltip" side="top" sideOffset={8} collisionPadding={12}>
         {t('Appearance, language and document health')}<Tooltip.Arrow />
       </Tooltip.Content></Tooltip.Portal></Tooltip.Root></Tooltip.Provider>
       <QuietButton className="language-switch" onClick={() => setLanguage(language === 'ar' ? 'en' : 'ar')} aria-label={language === 'ar' ? 'Switch to English' : 'التبديل إلى العربية'}>
